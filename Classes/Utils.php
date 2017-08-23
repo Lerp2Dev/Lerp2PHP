@@ -22,7 +22,11 @@ class Utils extends Core
             case "TokenUtils":
                 return "lerp2net_tokens";
             case "AuthUtils":
-                return "lerp2dev_auth";
+                return "lerp2net_auth";
+            case "SessionUtils":
+                return "lerp2net_sessions";
+            case "AppUtils":
+                return "lerp2net_apps";
             default:
                 return false;
         }
@@ -43,7 +47,7 @@ class EntityUtils extends Utils
 {
     public static function ExistsEntity($mk)
     {
-        return self::getStatsBy("sha", $mk) !== false; //self::StrFormat("SELECT id FROM lerp2net_entities WHERE sha = '{0}'", $mk)
+        return self::getStatsBy("sha", $mk) !== false;
     }
 
     public static function UpdateEntityInfo($mk)
@@ -51,7 +55,6 @@ class EntityUtils extends Utils
         if(self::Existsentity($mk))
         {
             $res1 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_activity = NOW() WHERE sha = '{0}'", $mk));
-            //if ip != last_ip ... update ip
             $def = self::getStatBy("ip", ClientUtils::GetClientIP()) != ClientUtils::GetClientIP();
             if($def)
                 $res2 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET ip = {0} WHERE sha = '{1}'", ClientUtils::GetClientIP(), $mk));
@@ -96,9 +99,30 @@ class AuthUtils extends Utils
         {
             $user_id = UserUtils::getStatBy("ip", ClientUtils::GetClientIP());
             if(isset($user_id))
-                if (!Query::run(self::StrFormat("INSERT INTO lerp2dev_auth (user_id, token_id, creation_date, valid_until) VALUES ('{0}', '{1}', NOW(), ADD_TIME(NOW(), INTERVAL {2} MINUTE))", $user_id, $token_id, defined("SESSION_TIME") ? SESSION_TIME : 60)))
+                if (!Query::run(self::StrFormat("INSERT INTO lerp2net_auth (user_id, token_id, creation_date, valid_until) VALUES ('{0}', '{1}', NOW(), ADD_TIME(NOW(), INTERVAL {2} MINUTE))", $user_id, $token_id, defined("SESSION_TIME") ? SESSION_TIME : 60)))
                     return AppLogger::$CurLogger->AddError("error_registering_auth");
         }
         return true;
+    }
+}
+
+class SessionUtils extends Utils
+{
+    public static function StartSession()
+    {
+
+    }
+
+    public static function EndSession()
+    {
+
+    }
+}
+
+class AppUtils extends Utils
+{
+    public static function GetID($prefix)
+    {
+        return self::getStatBy("prefix", $prefix);
     }
 }

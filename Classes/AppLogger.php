@@ -109,9 +109,11 @@ class AppIdCodes
         "error_registering_entity" => "",
         "error_updating_entity" => "",
         "error_registering_token" => "",
-        "error_registering_auth" => ""
+        "error_registering_auth" => "",
+        "error_registering_account" => "",
+        "wrong_app_prefix" => "... {0} ..."
     );
     public static $EventIds = array(
-        "register", "login", "logout", "get-profile", "get-tags", "get-tree", "register-entity"
+        "register", "login", "logout", "get-profile", "get-tags", "get-tree", "getAppId", "regenAuth", "rememberAuth", "createAuth", "registerEntity", "startAppSession", "endAppSession"
     );
 }

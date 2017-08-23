@@ -30,6 +30,14 @@ class AppAjax extends Core
                             else
                                 AppLogger::$CurLogger->AddParameter("data", $data);
                             break;
+                        case "getAppId":
+                            $prefix = @$_GET["prefix"];
+                            $data = AppUtils::GetID($prefix);
+                            if(!$data)
+                                AppLogger::$CurLogger->AddError("wrong_app_prefix", $prefix);
+                            else
+                                AppLogger::$CurLogger->AddParameter("data", $data);
+                            break;
                         default:
                             self::Kill("[GET] Action '".$_GET["action"]."' not set!");
                             break;
@@ -46,9 +54,7 @@ class AppAjax extends Core
                         switch($_POST["action"]) //Voy a hacer que los cases esten mejor escritas, dos palabras la primera en miuscula y la segunda en mayuscula
                         {
                             case "logout":
-                                break;
-                            case "rememberAuth":
-                                //Solicitar mi clave a través de la instance_key, si now - creation_date > valid_for, entonces, hacer un logout y pedir un nuevo login (el cual será automático, si, is_remembered es true)
+
                                 break;
                             /*case 'getOnlinePeople':
                                 $data = $_POST['data'];
@@ -68,20 +74,20 @@ class AppAjax extends Core
                     {
                         switch($_POST["action"]) //Voy a hacer que los cases esten mejor escritas, dos palabras la primera en miuscula y la segunda en mayuscula
                         {
-                            case "regen-auth":
+                            case "regenAuth":
                                 //La solicitación se hará a través de una OldKey, la cual se comprobará si ya existia en la base de datos, y si era asi se procederá a entregar un nuevo login
                                 //Es como llamar a create-auth (pero comprobando la antigua key)
                                 break;
-                            case "remember-auth":
+                            case "rememberAuth":
                                 //Este será el metodo que se llamará desde el timer cada minuto, si el valid_until es menor a PHP_NOW, entonces se devolverá un false, y en .NET habrá que llamar con otro post al regen-auth
                                 //Si la opcion de remember estaba activada, si no se devolverá al usuario al login para que vuelva a poner sus datos
                                 break;
-                            case "register-entity":
+                            case "registerEntity": //Esto no se va a usar mucho...
                                 $val = EntityUtils::RegisterEntity($entityKey);
                                 if(isset($val))
                                     AppLogger::$CurLogger->AddParameter("data", null);
                                 break;
-                            case "create-auth":
+                            case "createAuth":
                                 $entId = EntityUtils::RegisterEntity($entityKey);
                                 if(isset($entId))
                                 {
@@ -90,7 +96,10 @@ class AppAjax extends Core
                                         AppLogger::$CurLogger->AddParameter("data", array("auth_key", $authSha));
                                 }
                                 break;
-                            case "register-app-activity":
+                            case "startAppSession":
+
+                                break;
+                            case "endAppSession":
 
                                 break;
                         }

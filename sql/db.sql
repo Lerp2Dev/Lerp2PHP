@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-08-2017 a las 02:06:42
+-- Tiempo de generación: 23-08-2017 a las 05:22:15
 -- Versión del servidor: 10.1.19-MariaDB
 -- Versión de PHP: 5.6.28
 
@@ -35,33 +35,6 @@ CREATE TABLE `lerp2dev_actions` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `lerp2dev_apps`
---
-
-CREATE TABLE `lerp2dev_apps` (
-  `id` int(11) NOT NULL,
-  `prefix` text NOT NULL,
-  `creation_date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `lerp2dev_authkey`
---
-
-CREATE TABLE `lerp2dev_authkey` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `auth_key` varchar(32) NOT NULL,
-  `instance_key` varchar(32) NOT NULL,
-  `creation_date` datetime NOT NULL,
-  `valid_for` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `lerp2dev_badges`
 --
 
@@ -82,6 +55,7 @@ CREATE TABLE `lerp2dev_badges` (
 
 CREATE TABLE `lerp2dev_users` (
   `id` int(11) NOT NULL,
+  `entity_id` int(11) NOT NULL,
   `username` text NOT NULL,
   `password` text NOT NULL,
   `email` text NOT NULL,
@@ -106,6 +80,73 @@ CREATE TABLE `lerp2dev_user_log` (
   `creation_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `lerp2net_apps`
+--
+
+CREATE TABLE `lerp2net_apps` (
+  `id` int(11) NOT NULL,
+  `prefix` text NOT NULL,
+  `creation_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `lerp2net_auth`
+--
+
+CREATE TABLE `lerp2net_auth` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `token_id` int(11) NOT NULL,
+  `creation_date` datetime NOT NULL,
+  `valid_until` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `lerp2net_entities`
+--
+
+CREATE TABLE `lerp2net_entities` (
+  `id` int(11) NOT NULL,
+  `sha` text NOT NULL,
+  `last_ip` text NOT NULL,
+  `creation_date` datetime NOT NULL,
+  `last_activity` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `lerp2net_sessions`
+--
+
+CREATE TABLE `lerp2net_sessions` (
+  `id` int(11) NOT NULL,
+  `app_id` int(11) NOT NULL,
+  `entity_id` int(11) NOT NULL,
+  `start_time` datetime NOT NULL,
+  `finish_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `lerp2net_tokens`
+--
+
+CREATE TABLE `lerp2net_tokens` (
+  `id` int(11) NOT NULL,
+  `entity_id` int(11) NOT NULL,
+  `sha` text NOT NULL,
+  `creation_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Índices para tablas volcadas
 --
@@ -114,18 +155,6 @@ CREATE TABLE `lerp2dev_user_log` (
 -- Indices de la tabla `lerp2dev_actions`
 --
 ALTER TABLE `lerp2dev_actions`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `lerp2dev_apps`
---
-ALTER TABLE `lerp2dev_apps`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `lerp2dev_authkey`
---
-ALTER TABLE `lerp2dev_authkey`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -147,28 +176,43 @@ ALTER TABLE `lerp2dev_user_log`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `lerp2net_apps`
+--
+ALTER TABLE `lerp2net_apps`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `lerp2net_auth`
+--
+ALTER TABLE `lerp2net_auth`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `lerp2net_entities`
+--
+ALTER TABLE `lerp2net_entities`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `lerp2net_sessions`
+--
+ALTER TABLE `lerp2net_sessions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `lerp2net_tokens`
+--
+ALTER TABLE `lerp2net_tokens`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT de la tabla `hugelauncher_keys`
---
-ALTER TABLE `hugelauncher_keys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
 -- AUTO_INCREMENT de la tabla `lerp2dev_actions`
 --
 ALTER TABLE `lerp2dev_actions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `lerp2dev_apps`
---
-ALTER TABLE `lerp2dev_apps`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `lerp2dev_authkey`
---
-ALTER TABLE `lerp2dev_authkey`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `lerp2dev_badges`
@@ -184,6 +228,31 @@ ALTER TABLE `lerp2dev_users`
 -- AUTO_INCREMENT de la tabla `lerp2dev_user_log`
 --
 ALTER TABLE `lerp2dev_user_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `lerp2net_apps`
+--
+ALTER TABLE `lerp2net_apps`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `lerp2net_auth`
+--
+ALTER TABLE `lerp2net_auth`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `lerp2net_entities`
+--
+ALTER TABLE `lerp2net_entities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `lerp2net_sessions`
+--
+ALTER TABLE `lerp2net_sessions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `lerp2net_tokens`
+--
+ALTER TABLE `lerp2net_tokens`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
