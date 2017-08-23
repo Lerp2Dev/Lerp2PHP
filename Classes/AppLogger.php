@@ -34,7 +34,7 @@ class AppLogger extends Core
     {
         if(!$this->IsErrored())
             $this->Log["success"] = isset($_REQUEST['detailed']) || isset($_REQUEST['detailedsuc']) ? array(array_keys(AppIdCodes::$EventIds)[$this->EventId] => array_values(AppIdCodes::$EventIds)[$this->EventId]) : $this->EventId;
-        if(self::$isDieCalled === false)
+        if(!self::$isDieCalled)
             echo self::$CurLogger->DisplayJSON();
     }
 
@@ -65,6 +65,7 @@ class AppLogger extends Core
             $Error = array($ErrorName => count($args) == 1 ? $ErrorStr : self::StrFormat($ErrorStr, array_pop($args)));
         }
         $this->Log["errors"][] = $Error;
+        return false; //Siempre debe de devolver false
     }
 
     public function DisplayJSON()
@@ -103,9 +104,14 @@ class AppIdCodes
         "emptyEmail" => "",
         "invalidMail" => "",
         "wrongCMail" => "",
-        "queryError" => "{0}"
+        "queryError" => "{0}",
+        "github_error" => "Error with Github Api",
+        "error_registering_entity" => "",
+        "error_updating_entity" => "",
+        "error_registering_token" => "",
+        "error_registering_auth" => ""
     );
     public static $EventIds = array(
-        "register", "login", "logout", "get-profile", "get-tags", "get-tree"
+        "register", "login", "logout", "get-profile", "get-tags", "get-tree", "register-entity"
     );
 }

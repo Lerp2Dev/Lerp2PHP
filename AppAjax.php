@@ -14,7 +14,7 @@ class AppAjax extends Core
 {
     public static function getAction()
     {
-        AppLogger::$CurLogger->SetEventId($_REQUEST['action']);
+        AppLogger::$CurLogger->SetEventId(@$_REQUEST['action']);
         $req = $_SERVER['REQUEST_METHOD'];
         switch ($req) {
             case 'GET':
@@ -38,7 +38,7 @@ class AppAjax extends Core
                 break;
             case 'POST':
                 $authKey = @$_POST["k"];
-                $instanceKey = @$_POST["ik"];
+                $entityKey = @$_POST["mk"];
                 if(isset($authKey))
                 { //There are the actions that need the key given to the app.
                     if($_POST["action"])
@@ -57,19 +57,41 @@ class AppAjax extends Core
                                 echo count(UserUtils::getOnlinePeople($t));
                                 break;*/
                             default:
-                                self::Kill("[POST] Action '".@$_POST["action"]."' not registered!");
+                                self::Kill(self::StrFormat("[POST] Action '".@$_POST["action"]."' not registered with '{0}' authkey defined!", $authKey));
                                 break;
                         }
                     }
                 }
-                else if(isset($instanceKey))
+                else if(isset($entityKey))
                 {
                     if(isset($_POST["action"]))
                     {
                         switch($_POST["action"]) //Voy a hacer que los cases esten mejor escritas, dos palabras la primera en miuscula y la segunda en mayuscula
                         {
-                            case "rememberAuth":
-                                //Solicitar mi clave a través de la instance_key, si now - creation_date > valid_for, entonces, hacer un logout y pedir un nuevo login (el cual será automático, si, is_remembered es true)
+                            case "regen-auth":
+                                //La solicitación se hará a través de una OldKey, la cual se comprobará si ya existia en la base de datos, y si era asi se procederá a entregar un nuevo login
+                                //Es como llamar a create-auth (pero comprobando la antigua key)
+                                break;
+                            case "remember-auth":
+                                //Este será el metodo que se llamará desde el timer cada minuto, si el valid_until es menor a PHP_NOW, entonces se devolverá un false, y en .NET habrá que llamar con otro post al regen-auth
+                                //Si la opcion de remember estaba activada, si no se devolverá al usuario al login para que vuelva a poner sus datos
+                                break;
+                            case "register-entity":
+                                $val = EntityUtils::RegisterEntity($entityKey);
+                                if(isset($val))
+                                    AppLogger::$CurLogger->AddParameter("data", null);
+                                break;
+                            case "create-auth":
+                                $entId = EntityUtils::RegisterEntity($entityKey);
+                                if(isset($entId))
+                                {
+                                    $authSha = ClientUtils::NewGuid();
+                                    if (AuthUtils::RegisterAuth($entId, $authSha))
+                                        AppLogger::$CurLogger->AddParameter("data", array("auth_key", $authSha));
+                                }
+                                break;
+                            case "register-app-activity":
+
                                 break;
                         }
                     }
@@ -93,10 +115,12 @@ class AppAjax extends Core
                                 $email = mysqli_escape_string(Database::conn(), @$_POST['email']);
                                 //$cpass = @$_POST['pass_confirm'];
                                 if(!UserActions::AppRegister($username, $password, $email))
-                                    Debug::Test();
+                                    AppLogger::$CurLogger->AddError("error_registering_account");
+                                else
+                                    AppLogger::$CurLogger->AddParameter("data", "SUCCESS");
                                 break;
                             default:
-
+                                self::Kill(self::StrFormat("Improper action used '{0}' with no keys defined!"), $_POST["action"]);
                                 break;
                         }
                     }

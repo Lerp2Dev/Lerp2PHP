@@ -18,7 +18,7 @@ class Core
     }
 
     public static function StrFormat()
-    {
+    { //Realmente con esto se hace functionar mucho mas al servidor... Solamente se requiere en el logger y lo estoy usando en las consultas de SQL donde se puede hacer perfectamente un {$var}
         $args = func_get_args();
         if (count($args) == 0)
             return false;
@@ -48,26 +48,22 @@ class Core
 
     public static function GetRequest($url)
     {
-        // Get cURL resource
-        $curl = curl_init();
-        // Set some options - we are passing in a useragent too here
-        curl_setopt_array($curl, array(
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL => $url,
-            CURLOPT_FAILONERROR => 1
-        ));
-        // Send the request & save response to $resp
-        $resp = curl_exec($curl);
-        if($resp === false)
-            self::Kill('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
-        // Close request to clear up some resources
-        curl_close($curl);
-        return $resp;
+        $opts = [
+            'http' => [
+                'method' => 'GET',
+                'header' => [
+                    'User-Agent: PHP'
+                ]
+            ]
+        ];
+
+        $context = stream_context_create($opts);
+        $content = file_get_contents($url, false, $context);
+        return $content;
     }
 
-    /*public static function getCurLogger()
+    public static function GetJSONRequest($url)
     {
-        if (is_null(self::$CurLogger)) { self::$CurLogger = new AppLogger(); }
-        return self::$CurLogger;
-    }*/
+        return json_decode(self::GetRequest($url));
+    }
 }

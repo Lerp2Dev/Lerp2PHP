@@ -34,7 +34,7 @@ class Loader extends Settings
 
         define("INCLUDES", "includes/", true);
         define("ADMIN_INCLUDES", "includes/admin/includes/", true);
-        define("SESSION_TIME", 30, true);
+        define("SESSION_TIME", 60, true);
         define("DEBUG", true);
         /*define("MAX_ATTEMPS", 5, true);
         define("FLOOD_TIME", 30, true);

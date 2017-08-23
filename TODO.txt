@@ -1,1 +1,5 @@
 Unir AppAjax.php, Core.php, Loader.php...
+Actualizar el mysqli a pdo
+
+Añadir a QueryUtils metodos para añadir y actualizar datos
+Hacer que el entity_id de lerp2dev_users se registre a ser posible en el registro de un nuevo usuario o cuando se hace un login (desde una app)

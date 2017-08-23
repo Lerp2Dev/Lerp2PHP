@@ -192,7 +192,7 @@ class UserUtils extends ClientUtils
     }*/
     public static function getStatsBy($par_name, $par_data, $query = "*")
     {
-        return mysqli_fetch_assoc(Query::run("SELECT {$query} FROM lerp2dev_users WHERE $par_name = '$par_data'"));
+        return QueryUtils::getStatBy($par_name, $par_data, "lerp2dev_users", $query); //mysqli_fetch_assoc(Query::run("SELECT {$query} FROM lerp2dev_users WHERE $par_name = '$par_data'"));
     }
     public static function getStatBy($par_name, $par_data, $stat = "id")
     {
@@ -312,6 +312,7 @@ class UserUtils extends ClientUtils
         return CoreUtils::Now() - $last_act < SESSION_TIME * 60 ? '<img src="./images/icons/online.png" /><span>Online</span>' : '<img src="./images/icons/offline.png" /><span>Offline</span>';
     }*/
 }
+
 class UserActions extends UserUtils
 {
     public static function AppRegister($username, $password, $email) //AppRegister doesn't need pass confirmation

@@ -81,3 +81,16 @@ class Query extends Database
         //return mysqli_fetch_assoc(self::run("SELECT COUNT($name) AS total FROM $table$next"))['total'];
     }
 }
+
+class QueryUtils extends Core
+{
+    public static function getStatsBy($par_name, $par_data, $db, $query = "*")
+    {
+        return mysqli_fetch_assoc(Query::run(self::StrFormat("SELECT {0} FROM {1} WHERE {2} = '{3}'", $query, $db, $par_name, $par_data)));
+    }
+
+    public static function getStatBy($par_name, $par_data, $db, $stat = "id")
+    {
+        return self::getStatsBy($par_name, $par_data, $db, $stat)[$stat];
+    }
+}
