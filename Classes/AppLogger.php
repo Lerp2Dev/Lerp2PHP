@@ -87,7 +87,16 @@ class AppIdCodes
         "register" => "Succesfully register",
         "login" => "Succesfully login",
         "logout" => "Succesfully logout",
-        "get-profile" => "Succesfully got data"
+        "get-profile" => "Succesfully got data",
+        "get-tags" => "",
+        "get-tree" => "",
+        "getAppId" => "",
+        "regenAuth" => "",
+        "rememberAuth" => "",
+        "createAuth" => "",
+        "registerEntity" => "",
+        "startAppSession" => "",
+        "endAppSession" => ""
     );
     public static $Error = array(
         "wrong_username" => "The username called {0} hasn't been found in the DB!",
@@ -111,7 +120,11 @@ class AppIdCodes
         "error_registering_token" => "",
         "error_registering_auth" => "",
         "error_registering_account" => "",
-        "wrong_app_prefix" => "... {0} ..."
+        "wrong_app_prefix" => "... {0} ...",
+        "error_starting_session" => "",
+        "error_ending_session" => "",
+        "error_finalizing_session" => "",
+        "error_unset_parameters" => "There are unsetted parameters: {0} in the function..."
     );
     public static $EventIds = array(
         "register", "login", "logout", "get-profile", "get-tags", "get-tree", "getAppId", "regenAuth", "rememberAuth", "createAuth", "registerEntity", "startAppSession", "endAppSession"

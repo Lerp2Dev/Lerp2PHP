@@ -63,6 +63,10 @@ class Query extends Database
         }
         return $query;
     }
+    public static function lastId()
+    {
+        return parent::conn()->insert_id;
+    }
     public static function first($sql, $assoc = true)
     {
         if($assoc)
@@ -86,6 +90,7 @@ class QueryUtils extends Core
 {
     public static function getStatsBy($par_name, $par_data, $db, $query = "*")
     {
+        //echo self::StrFormat("SELECT {0} FROM {1} WHERE {2} = '{3}'", $query, $db, $par_name, $par_data);
         return mysqli_fetch_assoc(Query::run(self::StrFormat("SELECT {0} FROM {1} WHERE {2} = '{3}'", $query, $db, $par_name, $par_data)));
     }
 

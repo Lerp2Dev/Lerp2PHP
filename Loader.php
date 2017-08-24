@@ -52,6 +52,7 @@ class Loader extends Settings
         require_once('Settings.php');
         require_once('Classes/Debug.php');
         require_once('Classes/Database.php');
+        require_once('Classes/Utils.php');
         require_once('Classes/Users.php');
         require_once('Classes/AppLogger.php');
         /*require_once('classes/db.class.php');

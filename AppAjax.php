@@ -46,8 +46,21 @@ class AppAjax extends Core
                 break;
             case 'POST':
                 $authKey = @$_POST["k"];
-                $entityKey = @$_POST["mk"];
-                if(isset($authKey))
+                $entityKey = @$_POST["ek"];
+                $tokenKey = @$_POST["tk"];
+                if(isset($authKey) && isset($entityKey))
+                {
+                    if(isset($_POST["action"]))
+                    {
+                        switch ($_POST["action"])
+                        {
+                            default:
+                                self::Kill(self::StrFormat("[POST] Action '".@$_POST["action"]."' not registered with '{0}' both authKey & entityKey defined!", $authKey));
+                                break;
+                        }
+                    }
+                }
+                else if(isset($authKey))
                 { //There are the actions that need the key given to the app.
                     if($_POST["action"])
                     {
@@ -63,13 +76,13 @@ class AppAjax extends Core
                                 echo count(UserUtils::getOnlinePeople($t));
                                 break;*/
                             default:
-                                self::Kill(self::StrFormat("[POST] Action '".@$_POST["action"]."' not registered with '{0}' authkey defined!", $authKey));
+                                self::Kill(self::StrFormat("[POST] Action '".@$_POST["action"]."' not registered with '{0}' authKey defined!", $authKey));
                                 break;
                         }
                     }
                 }
                 else if(isset($entityKey))
-                {
+                { //Todas estas actions necesitan que la entityKey quede registrada o actualizada, por lo demás no es requerida salvo en los Auth, la creacion de nuevas sesiones y poco más
                     if(isset($_POST["action"]))
                     {
                         switch($_POST["action"]) //Voy a hacer que los cases esten mejor escritas, dos palabras la primera en miuscula y la segunda en mayuscula
@@ -82,7 +95,8 @@ class AppAjax extends Core
                                 //Este será el metodo que se llamará desde el timer cada minuto, si el valid_until es menor a PHP_NOW, entonces se devolverá un false, y en .NET habrá que llamar con otro post al regen-auth
                                 //Si la opcion de remember estaba activada, si no se devolverá al usuario al login para que vuelva a poner sus datos
                                 break;
-                            case "registerEntity": //Esto no se va a usar mucho...
+                            case "registerEntity":
+                                //Esto no se va a usar mucho...
                                 $val = EntityUtils::RegisterEntity($entityKey);
                                 if(isset($val))
                                     AppLogger::$CurLogger->AddParameter("data", null);
@@ -97,10 +111,45 @@ class AppAjax extends Core
                                 }
                                 break;
                             case "startAppSession":
-
+                                $appId = @$_POST["app_id"];
+                                $entId = EntityUtils::RegisterEntity($entityKey);
+                                if(isset($entId))
+                                {
+                                    $sessionId = SessionUtils::Start($entId, $appId);
+                                    if (isset($sessionId))
+                                        AppLogger::$CurLogger->AddParameter("data", array("session_id", $sessionId));
+                                }
+                                break;
+                            case "recordNewSession":
+                                $entId = EntityUtils::RegisterEntity($entityKey);
+                                $appId = @$_POST["app_id"];
+                                $startTime = @$_POST["start_time"];
+                                $endTime = @$_POST["end_time"];
+                                if(isset($entId))
+                                {
+                                    $sessionId = SessionUtils::RecordNewSession($entId, $appId, $startTime, $endTime);
+                                    if (isset($sessionId))
+                                        AppLogger::$CurLogger->AddParameter("data", array("session_id", $sessionId));
+                                }
+                                break;
+                            case "endStartedAppSession":
+                                $entId = EntityUtils::RegisterEntity($entityKey);
+                                $endTime = @$_POST["end_time"];
+                                if(isset($entId))
+                                {
+                                    $sha = @$_POST["sha"];
+                                    if (SessionUtils::EndStartedSession($sha, $endTime))
+                                        AppLogger::$CurLogger->AddParameter("data", null);
+                                }
                                 break;
                             case "endAppSession":
-
+                                $entId = EntityUtils::RegisterEntity($entityKey);
+                                if(isset($entId))
+                                {
+                                    $sha = @$_POST["sha"];
+                                    if (SessionUtils::End($sha))
+                                        AppLogger::$CurLogger->AddParameter("data", null);
+                                }
                                 break;
                         }
                     }
@@ -129,7 +178,7 @@ class AppAjax extends Core
                                     AppLogger::$CurLogger->AddParameter("data", "SUCCESS");
                                 break;
                             default:
-                                self::Kill(self::StrFormat("Improper action used '{0}' with no keys defined!"), $_POST["action"]);
+                                self::Kill(self::StrFormat("Improper action used '{0}' with no keys defined!", $_POST["action"]));
                                 break;
                         }
                     }

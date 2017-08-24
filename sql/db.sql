@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-08-2017 a las 05:22:15
+-- Tiempo de generación: 24-08-2017 a las 03:41:54
 -- Versión del servidor: 10.1.19-MariaDB
 -- Versión de PHP: 5.6.28
 
@@ -130,8 +130,9 @@ CREATE TABLE `lerp2net_sessions` (
   `id` int(11) NOT NULL,
   `app_id` int(11) NOT NULL,
   `entity_id` int(11) NOT NULL,
+  `sha` text NOT NULL,
   `start_time` datetime NOT NULL,
-  `finish_time` datetime NOT NULL
+  `end_time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
