@@ -69,6 +69,9 @@ class Loader extends Settings
 
         //Prepare Logger for this print
         AppLogger::$CurLogger = new AppLogger();
+
+        //Set error handler
+        parent::getInstance()->SetErrorHandler();
     }
 }
 

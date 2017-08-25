@@ -107,7 +107,7 @@ class AppAjax extends Core
                                 {
                                     $authSha = ClientUtils::NewGuid();
                                     if (AuthUtils::RegisterAuth($entId, $authSha))
-                                        AppLogger::$CurLogger->AddParameter("data", array("auth_key", $authSha));
+                                        AppLogger::$CurLogger->AddParameter("data", array("auth_key" => $authSha));
                                 }
                                 break;
                             case "startAppSession":
@@ -115,9 +115,9 @@ class AppAjax extends Core
                                 $entId = EntityUtils::RegisterEntity($entityKey);
                                 if(isset($entId))
                                 {
-                                    $sessionId = SessionUtils::Start($entId, $appId);
-                                    if (isset($sessionId))
-                                        AppLogger::$CurLogger->AddParameter("data", array("session_id", $sessionId));
+                                    $sessionSha = SessionUtils::Start($entId, $appId); //La cosa se queda aquí
+                                    if (isset($sessionSha))
+                                        AppLogger::$CurLogger->AddParameter("data", array("sha" => $sessionSha));
                                 }
                                 break;
                             case "recordNewSession":
@@ -129,7 +129,7 @@ class AppAjax extends Core
                                 {
                                     $sessionId = SessionUtils::RecordNewSession($entId, $appId, $startTime, $endTime);
                                     if (isset($sessionId))
-                                        AppLogger::$CurLogger->AddParameter("data", array("session_id", $sessionId));
+                                        AppLogger::$CurLogger->AddParameter("data", array("session_id" => $sessionId));
                                 }
                                 break;
                             case "endStartedAppSession":
@@ -150,6 +150,9 @@ class AppAjax extends Core
                                     if (SessionUtils::End($sha))
                                         AppLogger::$CurLogger->AddParameter("data", null);
                                 }
+                                break;
+                            default:
+                                self::Kill(self::StrFormat("[POST] Action '".@$_POST["action"]."' not registered with '{0}' entityKey defined!", $authKey));
                                 break;
                         }
                     }
@@ -194,6 +197,9 @@ class AppAjax extends Core
         }
     }
 }
+
+//if(empty($_REQUEST["showPHPErrors"]))
+//    error_reporting(0);
 
 //Do action...
 AppAjax::getAction();

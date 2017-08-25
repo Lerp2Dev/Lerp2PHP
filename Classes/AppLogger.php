@@ -42,7 +42,7 @@ class AppLogger extends Core
     {
         $Id = array_search($name, AppIdCodes::$EventIds);
         if($Id === false)
-            self::Kill(self::StrFormat("Event ID with name '{0}' doesn't exist!", $name));
+            self::Kill(self::StrFormat("[{0}] Event ID with name '{2}' doesn't exist! (Query string: {1})", $_SERVER['REQUEST_METHOD'], $_SERVER['QUERY_STRING'], $name));
         $this->EventId = $Id;
     }
 
@@ -113,7 +113,6 @@ class AppIdCodes
         "emptyEmail" => "",
         "invalidMail" => "",
         "wrongCMail" => "",
-        "queryError" => "{0}",
         "github_error" => "Error with Github Api",
         "error_registering_entity" => "",
         "error_updating_entity" => "",
@@ -124,9 +123,12 @@ class AppIdCodes
         "error_starting_session" => "",
         "error_ending_session" => "",
         "error_finalizing_session" => "",
-        "error_unset_parameters" => "There are unsetted parameters: {0} in the function..."
+        "entity_not_exists" => "",
+        "error_unset_parameters" => "There are unsetted parameters: {0} in the function...",
+        "queryError" => "{0}",
+        "phpError" => "Error: [{0}] {1}"
     );
     public static $EventIds = array(
-        "register", "login", "logout", "get-profile", "get-tags", "get-tree", "getAppId", "regenAuth", "rememberAuth", "createAuth", "registerEntity", "startAppSession", "endAppSession"
+        "register", "login", "logout", "get-profile", "get-tags", "get-tree", "getAppId", "regenAuth", "rememberAuth", "createAuth", "registerEntity", "startAppSession", "endAppSession", "getAppId"
     );
 }

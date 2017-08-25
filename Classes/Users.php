@@ -32,7 +32,7 @@ class ClientUtils extends Core
     }
     public static function NewGuid($input = null)
     {
-        if(empty($input)) $input = str_replace(".", "", GetClientIP());
+        if(empty($input)) $input = str_replace(".", "", self::GetClientIP()); //QUE NO SE ME OLVIDE MÁS LOS MALDITOS SELF:: !!!!!
         $s = strtoupper(md5(base64_encode($input)));
         $guidText =
             substr($s, 0, 8) . '-' .

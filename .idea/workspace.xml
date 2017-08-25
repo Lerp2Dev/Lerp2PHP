@@ -5,11 +5,10 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AppAjax.php" afterPath="$PROJECT_DIR$/AppAjax.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Classes/AppLogger.php" afterPath="$PROJECT_DIR$/Classes/AppLogger.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Classes/Database.php" afterPath="$PROJECT_DIR$/Classes/Database.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Classes/Users.php" afterPath="$PROJECT_DIR$/Classes/Users.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Classes/Utils.php" afterPath="$PROJECT_DIR$/Classes/Utils.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Core.php" afterPath="$PROJECT_DIR$/Core.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Loader.php" afterPath="$PROJECT_DIR$/Loader.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TODO.txt" afterPath="$PROJECT_DIR$/TODO.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sql/db.sql" afterPath="$PROJECT_DIR$/sql/db.sql" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,8 +37,18 @@
       <file leaf-file-name="AppLogger.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Classes/AppLogger.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="715">
-              <caret line="125" column="41" lean-forward="false" selection-start-line="125" selection-start-column="41" selection-end-line="125" selection-end-column="41" />
+            <state relative-caret-position="667">
+              <caret line="124" column="41" lean-forward="true" selection-start-line="124" selection-start-column="41" selection-end-line="124" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Badges.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Classes/Badges.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="7" column="3" lean-forward="false" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -48,9 +57,22 @@
       <file leaf-file-name="AppAjax.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AppAjax.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="579">
-              <caret line="143" column="38" lean-forward="true" selection-start-line="143" selection-start-column="38" selection-end-line="143" selection-end-column="38" />
+            <state relative-caret-position="329">
+              <caret line="178" column="97" lean-forward="true" selection-start-line="178" selection-start-column="36" selection-end-line="178" selection-end-column="97" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Core.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/hugelauncherphp/Core.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="718">
+              <caret line="88" column="5" lean-forward="true" selection-start-line="88" selection-start-column="5" selection-end-line="88" selection-end-column="5" />
+              <folding>
+                <marker date="1503628813156" expanded="true" signature="842:903" ph="SELECT clien... hugelauncher_keys" />
+                <marker date="1503628813156" expanded="true" signature="842:909" ph="SELECT clien... hugelauncher_keys" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -72,8 +94,8 @@
       <file leaf-file-name="Loader.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Loader.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="54" column="42" lean-forward="false" selection-start-line="54" selection-start-column="42" selection-end-line="54" selection-end-column="42" />
+            <state relative-caret-position="732">
+              <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="73" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -82,19 +104,19 @@
       <file leaf-file-name="Utils.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Classes/Utils.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1279">
-              <caret line="143" column="61" lean-forward="false" selection-start-line="143" selection-start-column="61" selection-end-line="143" selection-end-column="61" />
+            <state relative-caret-position="378">
+              <caret line="126" column="33" lean-forward="false" selection-start-line="126" selection-start-column="33" selection-end-line="126" selection-end-column="33" />
               <folding>
                 <element signature="e#6#87#0#PHP" expanded="true" />
-                <marker date="1503538301615" expanded="true" signature="309:359" ph="..." />
-                <marker date="1503538301615" expanded="true" signature="1405:1473" ph="UPDATE lerp2... " />
-                <marker date="1503538301615" expanded="true" signature="1656:1711" ph="UPDATE lerp2... " />
-                <marker date="1503538301615" expanded="true" signature="2020:2130" ph="INSERT INTO lerp2net_entities... " />
-                <marker date="1503538301615" expanded="true" signature="2782:2870" ph="INSERT INTO lerp2dev_tokens... " />
-                <marker date="1503538301615" expanded="true" signature="3812:3952" ph="INSERT INTO lerp2dev_auth... " />
-                <marker date="1503538301615" expanded="true" signature="4416:4518" ph="INSERT INTO lerp2net_sessions... " />
-                <marker date="1503538301615" expanded="true" signature="5204:5267" ph="UPDATE lerp2... " />
-                <marker date="1503538301615" expanded="true" signature="5832:5951" ph="INSERT INTO lerp2net_sessions... " />
+                <marker date="1503626766777" expanded="true" signature="309:359" ph="..." />
+                <marker date="1503626766777" expanded="true" signature="1407:1475" ph="UPDATE lerp2... " />
+                <marker date="1503626766777" expanded="true" signature="1663:1725" ph="UPDATE lerp2... " />
+                <marker date="1503626766777" expanded="true" signature="2081:2191" ph="INSERT INTO lerp2net_entities... " />
+                <marker date="1503626766777" expanded="true" signature="2843:2931" ph="INSERT INTO lerp2dev_tokens... " />
+                <marker date="1503626766777" expanded="true" signature="3873:4013" ph="INSERT INTO lerp2dev_auth... " />
+                <marker date="1503626766777" expanded="true" signature="4477:4579" ph="INSERT INTO lerp2net_sessions... " />
+                <marker date="1503626766777" expanded="true" signature="5265:5328" ph="UPDATE lerp2... " />
+                <marker date="1503626766777" expanded="true" signature="5893:6012" ph="INSERT INTO lerp2net_sessions... " />
               </folding>
             </state>
           </provider>
@@ -103,35 +125,15 @@
       <file leaf-file-name="Users.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Classes/Users.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="800">
-              <caret line="403" column="10" lean-forward="false" selection-start-line="403" selection-start-column="10" selection-end-line="403" selection-end-column="10" />
+            <state relative-caret-position="427">
+              <caret line="28" column="12" lean-forward="true" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="12" />
               <folding>
                 <element signature="e#7#89#0#PHP" expanded="true" />
-                <marker date="1503450034500" expanded="true" signature="6257:6322" ph="SELECT ${{$q... " />
-                <marker date="1503450034500" expanded="true" signature="7509:7550" ph="SELECT id FR... ranks" />
-                <marker date="1503450034500" expanded="true" signature="7753:7801" ph="SELECT last_... users" />
-                <marker date="1503450034500" expanded="true" signature="11879:12032" ph="INSERT INTO lerp2dev_users... " />
+                <marker date="1503626726051" expanded="true" signature="6315:6380" ph="SELECT ${{$q... " />
+                <marker date="1503626726051" expanded="true" signature="7567:7608" ph="SELECT id FR... ranks" />
+                <marker date="1503626726051" expanded="true" signature="7811:7859" ph="SELECT last_... users" />
+                <marker date="1503626726051" expanded="true" signature="11937:12090" ph="INSERT INTO lerp2dev_users... " />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="db.sql" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sql/db.sql">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="220" column="29" lean-forward="true" selection-start-line="220" selection-start-column="29" selection-end-line="220" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TODO.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TODO.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="88" lean-forward="true" selection-start-line="6" selection-start-column="88" selection-end-line="6" selection-end-column="88" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -139,18 +141,18 @@
       <file leaf-file-name="Core.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Core.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" column="191" lean-forward="false" selection-start-line="20" selection-start-column="191" selection-end-line="20" selection-end-column="191" />
+            <state relative-caret-position="715">
+              <caret line="70" column="4" lean-forward="false" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Debug.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Classes/Debug.php">
+      <file leaf-file-name="db.sql" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sql/db.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="24" lean-forward="false" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+            <state relative-caret-position="493">
+              <caret line="230" column="31" lean-forward="true" selection-start-line="230" selection-start-column="31" selection-end-line="230" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -170,6 +172,12 @@
       <find>RegisterMachine</find>
       <find>machine</find>
       <find>AddError</find>
+      <find>registerEntity</find>
+      <find>startAppSession</find>
+      <find>ip</find>
+      <find>$mk</find>
+      <find>NewGuid</find>
+      <find>Improper</find>
     </findStrings>
     <replaceStrings>
       <replace>AppLogger::$CurLogger-&gt;AddError</replace>
@@ -178,6 +186,7 @@
       <replace>EntityUtils</replace>
       <replace>RegisterEntity</replace>
       <replace>entity</replace>
+      <replace>$ek</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -196,16 +205,16 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/hugelauncherphp/sql/db.sql" />
         <option value="$PROJECT_DIR$/hugelauncherphp/Check.php" />
-        <option value="$PROJECT_DIR$/hugelauncherphp/Core.php" />
-        <option value="$PROJECT_DIR$/Classes/Users.php" />
-        <option value="$PROJECT_DIR$/Core.php" />
-        <option value="$PROJECT_DIR$/Loader.php" />
         <option value="$PROJECT_DIR$/Classes/Database.php" />
         <option value="$PROJECT_DIR$/TODO.txt" />
-        <option value="$PROJECT_DIR$/Classes/AppLogger.php" />
-        <option value="$PROJECT_DIR$/AppAjax.php" />
-        <option value="$PROJECT_DIR$/Classes/Utils.php" />
         <option value="$PROJECT_DIR$/sql/db.sql" />
+        <option value="$PROJECT_DIR$/Classes/Users.php" />
+        <option value="$PROJECT_DIR$/Classes/Utils.php" />
+        <option value="$PROJECT_DIR$/AppAjax.php" />
+        <option value="$PROJECT_DIR$/Classes/AppLogger.php" />
+        <option value="$PROJECT_DIR$/Core.php" />
+        <option value="$PROJECT_DIR$/Loader.php" />
+        <option value="$PROJECT_DIR$/hugelauncherphp/Core.php" />
       </list>
     </option>
   </component>
@@ -401,12 +410,12 @@
       <workItem from="1502920334905" duration="11213000" />
       <workItem from="1503363615287" duration="980000" />
       <workItem from="1503409043028" duration="15240000" />
-      <workItem from="1503499265470" duration="7951000" />
+      <workItem from="1503499265470" duration="16997000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54903000" />
+    <option name="totallyTimeSpent" value="63949000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -477,10 +486,10 @@
           <caret line="356" column="137" lean-forward="true" selection-start-line="356" selection-start-column="12" selection-end-line="356" selection-end-column="137" />
           <folding>
             <element signature="e#7#89#0#PHP" expanded="true" />
-            <marker date="1503450034500" expanded="true" signature="6257:6322" ph="SELECT ${{$q... " />
-            <marker date="1503450034500" expanded="true" signature="7509:7550" ph="SELECT id FR... ranks" />
-            <marker date="1503450034500" expanded="true" signature="7753:7801" ph="SELECT last_... users" />
-            <marker date="1503450034500" expanded="true" signature="11879:12032" ph="INSERT INTO lerp2dev_users... " />
+            <marker date="1503626726051" expanded="true" signature="6315:6380" ph="SELECT ${{$q... " />
+            <marker date="1503626726051" expanded="true" signature="7567:7608" ph="SELECT id FR... ranks" />
+            <marker date="1503626726051" expanded="true" signature="7811:7859" ph="SELECT last_... users" />
+            <marker date="1503626726051" expanded="true" signature="11937:12090" ph="INSERT INTO lerp2dev_users... " />
           </folding>
         </state>
       </provider>
@@ -490,9 +499,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#7#89#0#PHP" expanded="false" />
-            <marker date="1503363876684" expanded="true" signature="720:781" ph="SELECT clien... hugelauncher_keys" />
-            <marker date="1503363876684" expanded="true" signature="720:787" ph="SELECT clien... hugelauncher_keys" />
+            <marker date="1503628813156" expanded="true" signature="842:903" ph="SELECT clien... hugelauncher_keys" />
+            <marker date="1503628813156" expanded="true" signature="842:909" ph="SELECT clien... hugelauncher_keys" />
           </folding>
         </state>
       </provider>
@@ -580,10 +588,10 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#7#89#0#PHP" expanded="true" />
-            <marker date="1503450034500" expanded="true" signature="6257:6322" ph="SELECT ${{$q... " />
-            <marker date="1503450034500" expanded="true" signature="7509:7550" ph="SELECT id FR... ranks" />
-            <marker date="1503450034500" expanded="true" signature="7753:7801" ph="SELECT last_... users" />
-            <marker date="1503450034500" expanded="true" signature="11879:12032" ph="INSERT INTO lerp2dev_users... " />
+            <marker date="1503626726051" expanded="true" signature="6315:6380" ph="SELECT ${{$q... " />
+            <marker date="1503626726051" expanded="true" signature="7567:7608" ph="SELECT id FR... ranks" />
+            <marker date="1503626726051" expanded="true" signature="7811:7859" ph="SELECT last_... users" />
+            <marker date="1503626726051" expanded="true" signature="11937:12090" ph="INSERT INTO lerp2dev_users... " />
           </folding>
         </state>
       </provider>
@@ -654,10 +662,10 @@
           <caret line="330" column="12" lean-forward="true" selection-start-line="330" selection-start-column="12" selection-end-line="330" selection-end-column="26" />
           <folding>
             <element signature="e#7#89#0#PHP" expanded="true" />
-            <marker date="1503450034500" expanded="true" signature="6257:6322" ph="SELECT ${{$q... " />
-            <marker date="1503450034500" expanded="true" signature="7509:7550" ph="SELECT id FR... ranks" />
-            <marker date="1503450034500" expanded="true" signature="7753:7801" ph="SELECT last_... users" />
-            <marker date="1503450034500" expanded="true" signature="11879:12032" ph="INSERT INTO lerp2dev_users... " />
+            <marker date="1503626726051" expanded="true" signature="6315:6380" ph="SELECT ${{$q... " />
+            <marker date="1503626726051" expanded="true" signature="7567:7608" ph="SELECT id FR... ranks" />
+            <marker date="1503626726051" expanded="true" signature="7811:7859" ph="SELECT last_... users" />
+            <marker date="1503626726051" expanded="true" signature="11937:12090" ph="INSERT INTO lerp2dev_users... " />
           </folding>
         </state>
       </provider>
@@ -752,23 +760,15 @@
           <caret line="312" column="5" lean-forward="true" selection-start-line="312" selection-start-column="5" selection-end-line="312" selection-end-column="5" />
           <folding>
             <element signature="e#7#89#0#PHP" expanded="true" />
-            <marker date="1503450034500" expanded="true" signature="6257:6322" ph="SELECT ${{$q... " />
-            <marker date="1503450034500" expanded="true" signature="7509:7550" ph="SELECT id FR... ranks" />
-            <marker date="1503450034500" expanded="true" signature="7753:7801" ph="SELECT last_... users" />
-            <marker date="1503450034500" expanded="true" signature="11879:12032" ph="INSERT INTO lerp2dev_users... " />
+            <marker date="1503626726051" expanded="true" signature="6315:6380" ph="SELECT ${{$q... " />
+            <marker date="1503626726051" expanded="true" signature="7567:7608" ph="SELECT id FR... ranks" />
+            <marker date="1503626726051" expanded="true" signature="7811:7859" ph="SELECT last_... users" />
+            <marker date="1503626726051" expanded="true" signature="11937:12090" ph="INSERT INTO lerp2dev_users... " />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.settings.php" />
-    <entry file="file://$PROJECT_DIR$/Classes/Badges.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="3" lean-forward="false" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -801,18 +801,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hugelauncherphp/Core.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="21" column="58" lean-forward="false" selection-start-line="21" selection-start-column="58" selection-end-line="21" selection-end-column="58" />
-          <folding>
-            <element signature="e#7#89#0#PHP" expanded="false" />
-            <marker date="1503363876684" expanded="true" signature="720:781" ph="SELECT clien... hugelauncher_keys" />
-            <marker date="1503363876684" expanded="true" signature="720:787" ph="SELECT clien... hugelauncher_keys" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Settings.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -829,76 +817,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Core.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="191" lean-forward="false" selection-start-line="20" selection-start-column="191" selection-end-line="20" selection-end-column="191" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TODO.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" column="88" lean-forward="true" selection-start-line="6" selection-start-column="88" selection-end-line="6" selection-end-column="88" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Classes/Users.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="403" column="10" lean-forward="false" selection-start-line="403" selection-start-column="10" selection-end-line="403" selection-end-column="10" />
-          <folding>
-            <element signature="e#7#89#0#PHP" expanded="true" />
-            <marker date="1503450034500" expanded="true" signature="6257:6322" ph="SELECT ${{$q... " />
-            <marker date="1503450034500" expanded="true" signature="7509:7550" ph="SELECT id FR... ranks" />
-            <marker date="1503450034500" expanded="true" signature="7753:7801" ph="SELECT last_... users" />
-            <marker date="1503450034500" expanded="true" signature="11879:12032" ph="INSERT INTO lerp2dev_users... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Loader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="54" column="42" lean-forward="false" selection-start-line="54" selection-start-column="42" selection-end-line="54" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Classes/AppLogger.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="715">
-          <caret line="125" column="41" lean-forward="false" selection-start-line="125" selection-start-column="41" selection-end-line="125" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AppAjax.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="579">
-          <caret line="143" column="38" lean-forward="true" selection-start-line="143" selection-start-column="38" selection-end-line="143" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Classes/Utils.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1279">
-          <caret line="143" column="61" lean-forward="false" selection-start-line="143" selection-start-column="61" selection-end-line="143" selection-end-column="61" />
-          <folding>
-            <element signature="e#6#87#0#PHP" expanded="true" />
-            <marker date="1503538301615" expanded="true" signature="309:359" ph="..." />
-            <marker date="1503538301615" expanded="true" signature="1405:1473" ph="UPDATE lerp2... " />
-            <marker date="1503538301615" expanded="true" signature="1656:1711" ph="UPDATE lerp2... " />
-            <marker date="1503538301615" expanded="true" signature="2020:2130" ph="INSERT INTO lerp2net_entities... " />
-            <marker date="1503538301615" expanded="true" signature="2782:2870" ph="INSERT INTO lerp2dev_tokens... " />
-            <marker date="1503538301615" expanded="true" signature="3812:3952" ph="INSERT INTO lerp2dev_auth... " />
-            <marker date="1503538301615" expanded="true" signature="4416:4518" ph="INSERT INTO lerp2net_sessions... " />
-            <marker date="1503538301615" expanded="true" signature="5204:5267" ph="UPDATE lerp2... " />
-            <marker date="1503538301615" expanded="true" signature="5832:5951" ph="INSERT INTO lerp2net_sessions... " />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -916,9 +839,93 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sql/db.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="220" column="29" lean-forward="true" selection-start-line="220" selection-start-column="29" selection-end-line="220" selection-end-column="29" />
+        <state relative-caret-position="493">
+          <caret line="230" column="31" lean-forward="true" selection-start-line="230" selection-start-column="31" selection-end-line="230" selection-end-column="31" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classes/Users.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="427">
+          <caret line="28" column="12" lean-forward="true" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="12" />
+          <folding>
+            <element signature="e#7#89#0#PHP" expanded="true" />
+            <marker date="1503626726051" expanded="true" signature="6315:6380" ph="SELECT ${{$q... " />
+            <marker date="1503626726051" expanded="true" signature="7567:7608" ph="SELECT id FR... ranks" />
+            <marker date="1503626726051" expanded="true" signature="7811:7859" ph="SELECT last_... users" />
+            <marker date="1503626726051" expanded="true" signature="11937:12090" ph="INSERT INTO lerp2dev_users... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classes/Utils.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="126" column="33" lean-forward="false" selection-start-line="126" selection-start-column="33" selection-end-line="126" selection-end-column="33" />
+          <folding>
+            <element signature="e#6#87#0#PHP" expanded="true" />
+            <marker date="1503626766777" expanded="true" signature="309:359" ph="..." />
+            <marker date="1503626766777" expanded="true" signature="1407:1475" ph="UPDATE lerp2... " />
+            <marker date="1503626766777" expanded="true" signature="1663:1725" ph="UPDATE lerp2... " />
+            <marker date="1503626766777" expanded="true" signature="2081:2191" ph="INSERT INTO lerp2net_entities... " />
+            <marker date="1503626766777" expanded="true" signature="2843:2931" ph="INSERT INTO lerp2dev_tokens... " />
+            <marker date="1503626766777" expanded="true" signature="3873:4013" ph="INSERT INTO lerp2dev_auth... " />
+            <marker date="1503626766777" expanded="true" signature="4477:4579" ph="INSERT INTO lerp2net_sessions... " />
+            <marker date="1503626766777" expanded="true" signature="5265:5328" ph="UPDATE lerp2... " />
+            <marker date="1503626766777" expanded="true" signature="5893:6012" ph="INSERT INTO lerp2net_sessions... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AppAjax.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="178" column="97" lean-forward="true" selection-start-line="178" selection-start-column="36" selection-end-line="178" selection-end-column="97" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classes/Badges.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="3" lean-forward="false" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classes/AppLogger.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="667">
+          <caret line="124" column="41" lean-forward="true" selection-start-line="124" selection-start-column="41" selection-end-line="124" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Core.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="715">
+          <caret line="70" column="4" lean-forward="false" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Loader.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="732">
+          <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="73" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hugelauncherphp/Core.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="718">
+          <caret line="88" column="5" lean-forward="true" selection-start-line="88" selection-start-column="5" selection-end-line="88" selection-end-column="5" />
+          <folding>
+            <marker date="1503628813156" expanded="true" signature="842:903" ph="SELECT clien... hugelauncher_keys" />
+            <marker date="1503628813156" expanded="true" signature="842:909" ph="SELECT clien... hugelauncher_keys" />
+          </folding>
         </state>
       </provider>
     </entry>

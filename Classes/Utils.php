@@ -18,7 +18,7 @@ class Utils extends Core
         switch ($name)
         {
             case "EntityUtils":
-                return "lerp2net_entity";
+                return "lerp2net_entities";
             case "TokenUtils":
                 return "lerp2net_tokens";
             case "AuthUtils":
@@ -45,38 +45,38 @@ class Utils extends Core
 
 class EntityUtils extends Utils
 {
-    public static function ExistsEntity($mk)
+    public static function ExistsEntity($ek)
     {
-        return self::getStatsBy("sha", $mk) !== false;
+        return self::getStatsBy("sha", $ek) !== false;
     }
 
-    public static function UpdateEntityInfo($mk)
+    public static function UpdateEntityInfo($ek)
     {
-        if(self::Existsentity($mk))
+        if(self::Existsentity($ek))
         {
-            $res1 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_activity = NOW() WHERE sha = '{0}'", $mk));
-            $def = self::getStatBy("ip", ClientUtils::GetClientIP()) != ClientUtils::GetClientIP();
+            $res1 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_activity = NOW() WHERE sha = '{0}'", $ek));
+            $def = self::getStatBy("last_ip", ClientUtils::GetClientIP()) != ClientUtils::GetClientIP();
             if($def)
-                $res2 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET ip = {0} WHERE sha = '{1}'", ClientUtils::GetClientIP(), $mk));
+                $res2 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_ip = '{0}' WHERE sha = '{1}'", ClientUtils::GetClientIP(), $ek));
             return !empty($res1) && ($def && !empty($res2) || !$def);
         }
         else
-            return false;
+            return AppLogger::$CurLogger->AddError("entity_not_exists");
     }
 
-    public static function RegisterEntity($mk)
+    public static function RegisterEntity($ek)
     {
-        if(!self::ExistsEntity($mk))
+        if(!self::ExistsEntity($ek))
         {
-            if (!Query::run(self::StrFormat("INSERT INTO lerp2net_entities (sha, last_ip, creation_date, last_activity) VALUES ('{0}', '{1}', NOW(), NOW())", $mk, ClientUtils::GetClientIP())))
+            if (!Query::run(self::StrFormat("INSERT INTO lerp2net_entities (sha, last_ip, creation_date, last_activity) VALUES ('{0}', '{1}', NOW(), NOW())", $ek, ClientUtils::GetClientIP())))
                 return AppLogger::$CurLogger->AddError("error_registering_entity");
         }
         else
         {
-            if (!self::UpdateEntityInfo($mk))
+            if (!self::UpdateEntityInfo($ek))
                 return AppLogger::$CurLogger->AddError("error_updating_entity");
         }
-        return Query::lastId(); //self::getStatBy("sha", $mk); //Return the id (porque para que vas a devolver un valor que has pasado como parametro)
+        return Query::lastId(); //self::getStatBy("sha", $ek); //Return the id (porque para que vas a devolver un valor que has pasado como parametro)
     }
 }
 

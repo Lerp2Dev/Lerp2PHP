@@ -66,4 +66,15 @@ class Core
     {
         return json_decode(self::GetRequest($url));
     }
+
+    public function SetErrorHandler()
+    {
+        //Set error handler
+        set_error_handler(array($this, 'ErrorHandling'));
+    }
+
+    public function ErrorHandling($errno, $errstr)
+    {
+        AppLogger::$CurLogger->AddError("phpError", $errno, $errstr);
+    }
 }
