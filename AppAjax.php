@@ -115,7 +115,7 @@ class AppAjax extends Core
                                 $entId = EntityUtils::RegisterEntity($entityKey);
                                 if(isset($entId))
                                 {
-                                    $sessionSha = SessionUtils::Start($entId, $appId); //La cosa se queda aquí
+                                    $sessionSha = SessionUtils::Start($entId, $appId);
                                     if (isset($sessionSha))
                                         AppLogger::$CurLogger->AddParameter("data", array("sha" => $sessionSha));
                                 }
@@ -168,7 +168,7 @@ class AppAjax extends Core
                                 $username = mysqli_escape_string(Database::conn(), @$_POST['username']);
                                 $password = @$_POST['password'];
                                 if(!UserActions::AppLogin($username, $password))
-                                    Debug::Test(); //Restar aquí un intento de login... Aunq esto se puede hacer antes... Aquino se lo q voy a hacer
+                                    Debug::Test(); //Restar aquí un intento de login... Aunq esto se puede hacer antes... Aqui no se lo q voy a hacer
                                 break;
                             case "register":
                                 $username = mysqli_escape_string(Database::conn(), @$_POST['username']);
