@@ -126,6 +126,8 @@ class AppIdCodes
         "entity_not_exists" => "",
         "null_auth_reg" => "",
         "null_token_reg" => "",
+        "null_user_reg" => "",
+        "wrong_credentials" => "",
         "error_unset_parameters" => "There are unsetted parameters: {0} in the function...",
         "queryError" => "{0}",
         "phpError" => "Error: [{0}] {1}"

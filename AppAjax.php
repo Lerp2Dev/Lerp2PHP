@@ -86,12 +86,6 @@ class AppAjax extends Core
                             case "logout":
 
                                 break;
-                            /*case 'getOnlinePeople':
-                                $data = $_POST['data'];
-                                $t = 120;
-                                if(isset($data) && is_numeric($data)) {$t = $data*60;}
-                                echo count(UserUtils::getOnlinePeople($t));
-                                break;*/
                             default:
                                 self::Kill(self::StrFormat("[POST] Action '{0}' not registered with '{1}' tokenKey defined!", $_POST["action"], $tokenKey));
                                 break;
@@ -159,16 +153,6 @@ class AppAjax extends Core
                                         AppLogger::$CurLogger->AddParameter("data", null);
                                 }
                                 break;
-                            /*case "getUserInfo":
-                                $entId = EntityUtils::RegisterEntity($entityKey);
-                                if(isset($entId))
-                                {
-                                    $userId = @$_POST["auth_id"];
-                                    $data = AuthUtils::GetUserInfo($userId);
-                                    if (isset($data))
-                                        AppLogger::$CurLogger->AddParameter("data", $data);
-                                }
-                                break;*/
                             default:
                                 self::Kill(self::StrFormat("[POST] Action '{0}' not registered with '{1}' entityKey defined!", $_POST["action"], $tokenKey));
                                 break;
@@ -215,9 +199,6 @@ class AppAjax extends Core
         }
     }
 }
-
-//if(empty($_REQUEST["showPHPErrors"]))
-//    error_reporting(0);
 
 //Do action...
 AppAjax::getAction();
