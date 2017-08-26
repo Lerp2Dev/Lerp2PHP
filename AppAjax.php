@@ -64,7 +64,9 @@ class AppAjax extends Core
                                 $entId = EntityUtils::RegisterEntity($entityKey);
                                 if(isset($entId))
                                 {
-                                    $data = AuthUtils::RegisterAuth($entId, $tokenKey);
+                                    $username = @$_POST["username"];
+                                    $password = @$_POST["username"];
+                                    $data = AuthUtils::RegisterAuth($entId, $tokenKey, $username, $password);
                                     if ($data)
                                         AppLogger::$CurLogger->AddParameter("data", $data);
                                 }
@@ -157,7 +159,7 @@ class AppAjax extends Core
                                         AppLogger::$CurLogger->AddParameter("data", null);
                                 }
                                 break;
-                            case "getUserInfo":
+                            /*case "getUserInfo":
                                 $entId = EntityUtils::RegisterEntity($entityKey);
                                 if(isset($entId))
                                 {
@@ -166,7 +168,7 @@ class AppAjax extends Core
                                     if (isset($data))
                                         AppLogger::$CurLogger->AddParameter("data", $data);
                                 }
-                                break;
+                                break;*/
                             default:
                                 self::Kill(self::StrFormat("[POST] Action '{0}' not registered with '{1}' entityKey defined!", $_POST["action"], $tokenKey));
                                 break;

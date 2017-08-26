@@ -77,6 +77,11 @@ class Core
         return "id, entity_id, username, email, ip, creation_date, last_activity, conn_time, coins_balance";
     }
 
+    public static function IsValidMD5($md5 = '')
+    {
+        return preg_match('/^[a-f0-9]{32}$/', $md5);
+    }
+
     public function SetErrorHandler()
     {
         //Set error handler

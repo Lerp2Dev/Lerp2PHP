@@ -52,30 +52,40 @@ class EntityUtils extends Utils
 
     public static function UpdateEntityInfo($ek)
     {
-        if(self::Existsentity($ek))
+        if(isset($ek))
         {
-            $res1 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_activity = NOW() WHERE sha = '{0}'", $ek));
-            $def = self::getStatBy("last_ip", ClientUtils::GetClientIP()) != ClientUtils::GetClientIP();
-            if($def)
-                $res2 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_ip = '{0}' WHERE sha = '{1}'", ClientUtils::GetClientIP(), $ek));
-            return !empty($res1) && ($def && !empty($res2) || !$def);
+            if (self::ExistsEntity($ek))
+            {
+                $res1 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_activity = NOW() WHERE sha = '{0}'", $ek));
+                $def = self::getStatBy("last_ip", ClientUtils::GetClientIP()) != ClientUtils::GetClientIP();
+                if ($def)
+                    $res2 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_ip = '{0}' WHERE sha = '{1}'", ClientUtils::GetClientIP(), $ek));
+                return !empty($res1) && ($def && !empty($res2) || !$def);
+            }
+            else
+                return AppLogger::$CurLogger->AddError("entity_not_exists");
         }
         else
-            return AppLogger::$CurLogger->AddError("entity_not_exists");
+            return AppLogger::$CurLogger->AddError("error_unset_parameters", "entitySha");
     }
 
     public static function RegisterEntity($ek)
     {
-        if(!self::ExistsEntity($ek))
+        if(isset($ek))
         {
-            if (!Query::run(self::StrFormat("INSERT INTO lerp2net_entities (sha, last_ip, creation_date, last_activity) VALUES ('{0}', '{1}', NOW(), NOW())", $ek, ClientUtils::GetClientIP())))
-                return AppLogger::$CurLogger->AddError("error_registering_entity");
+            if(!self::ExistsEntity($ek))
+            {
+                if (!Query::run(self::StrFormat("INSERT INTO lerp2net_entities (sha, last_ip, creation_date, last_activity) VALUES ('{0}', '{1}', NOW(), NOW())", $ek, ClientUtils::GetClientIP())))
+                    return AppLogger::$CurLogger->AddError("error_registering_entity");
+            }
+            else
+            {
+                if (!self::UpdateEntityInfo($ek))
+                    return AppLogger::$CurLogger->AddError("error_updating_entity");
+            }
         }
         else
-        {
-            if (!self::UpdateEntityInfo($ek))
-                return AppLogger::$CurLogger->AddError("error_updating_entity");
-        }
+            return AppLogger::$CurLogger->AddError("error_unset_parameters", "entitySha");
         return Query::lastId(); //self::getStatBy("sha", $ek); //Return the id (porque para que vas a devolver un valor que has pasado como parametro)
     }
 }
@@ -107,53 +117,66 @@ class TokenUtils extends Utils
 
 class AuthUtils extends Utils
 {
-    public static function RegisterAuth($entId, $tokenSha)
+    public static function RegisterAuth($entId, $tokenSha, $username, $password)
     {
-        $date = self::SQLNow();
-        $token_id = TokenUtils::RegisterToken($entId, $tokenSha, $date);
-        if(isset($token_id))
+        if(isset($entId) && isset($tokenSha) && isset($username) && isset($password))
         {
-            $user_id = UserUtils::getStatBy("ip", ClientUtils::GetClientIP());
-            if(isset($user_id))
-                if (!Query::run(self::StrFormat("INSERT INTO lerp2net_auth (user_id, token_id, creation_date, valid_until) VALUES ('{0}', '{1}', '{2}', ADD_TIME(NOW(), INTERVAL {3} MINUTE))", $user_id, $token_id, $date, defined("SESSION_TIME") ? SESSION_TIME : 60)))
-                    return AppLogger::$CurLogger->AddError("error_registering_auth");
+            $date = self::SQLNow();
+            $token_id = TokenUtils::RegisterToken($entId, $tokenSha, $date);
+            if (isset($token_id)) {
+                $user_id = UserUtils::getStatBy("ip", ClientUtils::GetClientIP());
+                if (isset($user_id))
+                    if (!Query::run(self::StrFormat("INSERT INTO lerp2net_auth (user_id, token_id, creation_date, valid_until) VALUES ('{0}', '{1}', '{2}', ADD_TIME(NOW(), INTERVAL {3} MINUTE))", $user_id, $token_id, $date, defined("SESSION_TIME") ? SESSION_TIME : 60)))
+                        return AppLogger::$CurLogger->AddError("error_registering_auth");
+            }
+            $authId = Query::lastId();
+            $userData = self::GetUserInfo($authId, $username, $password);
+            if (isset($userData))
+                return array("id" => $authId, "creation_date" => $date, "user_data" => $userData);
         }
-        return array("id" => Query::lastId(), "creation_date" => $date);
+        else
+            return AppLogger::$CurLogger->AddError("error_unset_parameters", "entId, tokenSha, username, password");
     }
 
     //This will be used a lot because it checks if the current user has still a valid connection or not...
     public static function CheckIfAuthIsvalid($tokenSha, $creationDate)
     {
-        $data = Query::run(self::StrFormat("SELECT id FROM lerp2net_tokens WHERE sha = '{0}' AND creation_date = '{1}'", $tokenSha, $creationDate));
-        if($data !== false)
+        if(isset($tokenSha) && isset($creationDate))
         {
-            $tokenId = mysqli_fetch_assoc($data)["id"];
-            $data2 = Query::run(self::StrFormat("SELECT valid_until FROM lerp2net_auth WHERE token_id = '{0}' AND creation_date = '{1}'", $tokenId, $creationDate));
-            if($data2 !== false)
+            $data = Query::run(self::StrFormat("SELECT id FROM lerp2net_tokens WHERE sha = '{0}' AND creation_date = '{1}'", $tokenSha, $creationDate));
+            if($data !== false)
             {
-                $validUntil = mysqli_fetch_assoc($data2)["valid_until"];
-                return array("token_id" => $tokenId, "valid_until" => $validUntil, "is_valid" => strtotime($validUntil) >= time());
+                $tokenId = mysqli_fetch_assoc($data)["id"];
+                $data2 = Query::run(self::StrFormat("SELECT valid_until FROM lerp2net_auth WHERE token_id = '{0}' AND creation_date = '{1}'", $tokenId, $creationDate));
+                if($data2 !== false)
+                {
+                    $validUntil = mysqli_fetch_assoc($data2)["valid_until"];
+                    return array("token_id" => $tokenId, "valid_until" => $validUntil, "is_valid" => strtotime($validUntil) >= time());
+                }
+                else
+                    return AppLogger::$CurLogger->AddError("null_auth_reg");
             }
             else
-                return AppLogger::$CurLogger->AddError("null_auth_reg");
+                return AppLogger::$CurLogger->AddError("null_token_reg");
         }
         else
-            return AppLogger::$CurLogger->AddError("null_token_reg");
+            return AppLogger::$CurLogger->AddError("error_unset_parameters", "tokenSha, creationDate");
     }
 
-    public static function GetUserInfo($authId)
+    private static function GetUserInfo($authId, $username, $password)
     {
-        $userId = self::getStatBy("id", $authId, "user_id");
-        if(isset($userId))
+        if(isset($authId) && isset($username) && isset($password))
         {
-            $data = Query::run(self::StrFormat("SELECT {0} FROM lerp2dev_users WHERE id = '{1}'", self::SafeUserRows(), $userId));
-            if(isset($data))
-                return mysqli_fetch_assoc($data);
-            else
-                return AppLogger::$CurLogger->AddError("null_userid_reg");
+            $userId = self::getStatBy("id", $authId, "user_id");
+            if (isset($userId)) {
+                $data = Query::run(self::StrFormat("SELECT {0} FROM lerp2dev_users WHERE id = '{1}' AND username = '{2}' AND password = '{3}'", self::SafeUserRows(), $userId, $username, self::IsValidMD5($password) ? $password : md5($password)));
+                if (isset($data))
+                    return mysqli_fetch_assoc($data);
+                else
+                    return AppLogger::$CurLogger->AddError("wrong_credentials");
+            } else
+                return AppLogger::$CurLogger->AddError("null_user_reg");
         }
-        else
-            return AppLogger::$CurLogger->AddError("null_user_reg");
     }
 }
 
@@ -161,9 +184,9 @@ class SessionUtils extends Utils
 {
     public static function Start($entId, $appId)
     { //Must return its sessionId
-        $sha = md5(ClientUtils::NewGuid().time());
         if(isset($entId) && isset($appId))
         {
+            $sha = md5(ClientUtils::NewGuid().time());
             if (!Query::run(self::StrFormat("INSERT INTO lerp2net_sessions (app_id, entity_id, sha, start_time) VALUES ('{0}', '{1}', '{2}', NOW())", $appId, $entId, $sha)))
                 return AppLogger::$CurLogger->AddError("error_starting_session");
         }
