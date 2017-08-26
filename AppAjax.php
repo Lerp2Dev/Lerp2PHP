@@ -24,7 +24,7 @@ class AppAjax extends Core
                     {
                         case "get-profile":
                             $username = @$_GET['username'];
-                            $data = UserUtils::getStatsBy("username", $username);
+                            $data = UserUtils::getStatsBy("username", $username, self::SafeUserRows());
                             if(!$data)
                                 AppLogger::$CurLogger->AddError("wrong_username", $username);
                             else
@@ -45,22 +45,37 @@ class AppAjax extends Core
                 }
                 break;
             case 'POST':
-                $authKey = @$_POST["k"];
-                $entityKey = @$_POST["ek"];
-                $tokenKey = @$_POST["tk"];
-                if(isset($authKey) && isset($entityKey))
+                //$tokenKey = @$_POST["ak"];
+                $entityKey = false;
+                if(isset($_POST["ek"]))
+                    $entityKey = @$_POST["ek"];
+
+                $tokenKey = false;
+                if(isset($_POST["tk"]))
+                    $tokenKey = $_POST["tk"];
+
+                if(!empty($tokenKey) && !empty($entityKey))
                 {
                     if(isset($_POST["action"]))
                     {
                         switch ($_POST["action"])
                         {
+                            case "createAuth":
+                                $entId = EntityUtils::RegisterEntity($entityKey);
+                                if(isset($entId))
+                                {
+                                    $data = AuthUtils::RegisterAuth($entId, $tokenKey);
+                                    if ($data)
+                                        AppLogger::$CurLogger->AddParameter("data", $data);
+                                }
+                                break;
                             default:
-                                self::Kill(self::StrFormat("[POST] Action '".@$_POST["action"]."' not registered with '{0}' both authKey & entityKey defined!", $authKey));
+                                self::Kill(self::StrFormat("[POST] Action '{0}' not registered with '{1}' both tokenKey & entityKey defined!", $_POST["action"], $tokenKey));
                                 break;
                         }
                     }
                 }
-                else if(isset($authKey))
+                else if(!empty($tokenKey))
                 { //There are the actions that need the key given to the app.
                     if($_POST["action"])
                     {
@@ -76,17 +91,23 @@ class AppAjax extends Core
                                 echo count(UserUtils::getOnlinePeople($t));
                                 break;*/
                             default:
-                                self::Kill(self::StrFormat("[POST] Action '".@$_POST["action"]."' not registered with '{0}' authKey defined!", $authKey));
+                                self::Kill(self::StrFormat("[POST] Action '{0}' not registered with '{1}' tokenKey defined!", $_POST["action"], $tokenKey));
                                 break;
                         }
                     }
                 }
-                else if(isset($entityKey))
+                else if(!empty($entityKey))
                 { //Todas estas actions necesitan que la entityKey quede registrada o actualizada, por lo demás no es requerida salvo en los Auth, la creacion de nuevas sesiones y poco más
                     if(isset($_POST["action"]))
                     {
                         switch($_POST["action"]) //Voy a hacer que los cases esten mejor escritas, dos palabras la primera en miuscula y la segunda en mayuscula
                         {
+                            case "registerEntity":
+                                //Esto no se va a usar mucho...
+                                $val = EntityUtils::RegisterEntity($entityKey);
+                                if(isset($val))
+                                    AppLogger::$CurLogger->AddParameter("data", null);
+                                break;
                             case "regenAuth":
                                 //La solicitación se hará a través de una OldKey, la cual se comprobará si ya existia en la base de datos, y si era asi se procederá a entregar un nuevo login
                                 //Es como llamar a create-auth (pero comprobando la antigua key)
@@ -94,21 +115,6 @@ class AppAjax extends Core
                             case "rememberAuth":
                                 //Este será el metodo que se llamará desde el timer cada minuto, si el valid_until es menor a PHP_NOW, entonces se devolverá un false, y en .NET habrá que llamar con otro post al regen-auth
                                 //Si la opcion de remember estaba activada, si no se devolverá al usuario al login para que vuelva a poner sus datos
-                                break;
-                            case "registerEntity":
-                                //Esto no se va a usar mucho...
-                                $val = EntityUtils::RegisterEntity($entityKey);
-                                if(isset($val))
-                                    AppLogger::$CurLogger->AddParameter("data", null);
-                                break;
-                            case "createAuth":
-                                $entId = EntityUtils::RegisterEntity($entityKey);
-                                if(isset($entId))
-                                {
-                                    $authSha = ClientUtils::NewGuid();
-                                    if (AuthUtils::RegisterAuth($entId, $authSha))
-                                        AppLogger::$CurLogger->AddParameter("data", array("auth_key" => $authSha));
-                                }
                                 break;
                             case "startAppSession":
                                 $appId = @$_POST["app_id"];
@@ -151,8 +157,18 @@ class AppAjax extends Core
                                         AppLogger::$CurLogger->AddParameter("data", null);
                                 }
                                 break;
+                            case "getUserInfo":
+                                $entId = EntityUtils::RegisterEntity($entityKey);
+                                if(isset($entId))
+                                {
+                                    $userId = @$_POST["auth_id"];
+                                    $data = AuthUtils::GetUserInfo($userId);
+                                    if (isset($data))
+                                        AppLogger::$CurLogger->AddParameter("data", $data);
+                                }
+                                break;
                             default:
-                                self::Kill(self::StrFormat("[POST] Action '".@$_POST["action"]."' not registered with '{0}' entityKey defined!", $authKey));
+                                self::Kill(self::StrFormat("[POST] Action '{0}' not registered with '{1}' entityKey defined!", $_POST["action"], $tokenKey));
                                 break;
                         }
                     }

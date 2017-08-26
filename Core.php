@@ -67,6 +67,16 @@ class Core
         return json_decode(self::GetRequest($url));
     }
 
+    public static function SQLNow()
+    {
+        return date("Y-m-d H:i:s");
+    }
+
+    public static function SafeUserRows()
+    {
+        return "id, entity_id, username, email, ip, creation_date, last_activity, conn_time, coins_balance";
+    }
+
     public function SetErrorHandler()
     {
         //Set error handler
@@ -75,6 +85,6 @@ class Core
 
     public function ErrorHandling($errno, $errstr)
     {
-        AppLogger::$CurLogger->AddError("phpError", $errno, $errstr);
+        AppLogger::$CurLogger->AddError("phpError", isset($errno) ? $errno : "No Err Code", $errstr);
     }
 }
