@@ -27,6 +27,8 @@ class Utils extends Core
                 return "lerp2net_sessions";
             case "AppUtils":
                 return "lerp2net_apps";
+            case "UserUtils":
+                return "lerp2dev_users";
             default:
                 return false;
         }
@@ -124,15 +126,17 @@ class AuthUtils extends Utils
             $date = self::SQLNow();
             $token_id = TokenUtils::RegisterToken($entId, $tokenSha, $date);
             if (isset($token_id)) {
-                $user_id = UserUtils::getStatBy("ip", ClientUtils::GetClientIP());
+                $user_id = QueryUtils::getStatBy("username", $username, "lerp2dev_users");
                 if (isset($user_id))
-                    if (!Query::run(self::StrFormat("INSERT INTO lerp2net_auth (user_id, token_id, creation_date, valid_until) VALUES ('{0}', '{1}', '{2}', ADD_TIME(NOW(), INTERVAL {3} MINUTE))", $user_id, $token_id, $date, defined("SESSION_TIME") ? SESSION_TIME : 60)))
+                    if (!Query::run(self::StrFormat("INSERT INTO lerp2net_auth (user_id, token_id, creation_date, valid_until) VALUES ('{0}', '{1}', '{2}', NOW() + INTERVAL {3} MINUTE)", $user_id, $token_id, $date, defined("SESSION_TIME") ? SESSION_TIME : 60)))
                         return AppLogger::$CurLogger->AddError("error_registering_auth");
             }
             $authId = Query::lastId();
             $userData = self::GetUserInfo($authId, $username, $password);
             if (isset($userData))
                 return array("id" => $authId, "creation_date" => $date, "user_data" => $userData);
+            else
+                return AppLogger::$CurLogger->AddError("hackTry", "auth_id: ".$authId."; username: ".$username."; password: ".$password);
         }
         else
             return AppLogger::$CurLogger->AddError("error_unset_parameters", "entId, tokenSha, username, password");
@@ -144,11 +148,11 @@ class AuthUtils extends Utils
         if(isset($tokenSha) && isset($creationDate))
         {
             $data = Query::run(self::StrFormat("SELECT id FROM lerp2net_tokens WHERE sha = '{0}' AND creation_date = '{1}'", $tokenSha, $creationDate));
-            if($data !== false)
+            if($data != false)
             {
                 $tokenId = mysqli_fetch_assoc($data)["id"];
                 $data2 = Query::run(self::StrFormat("SELECT valid_until FROM lerp2net_auth WHERE token_id = '{0}' AND creation_date = '{1}'", $tokenId, $creationDate));
-                if($data2 !== false)
+                if($data2 != false)
                 {
                     $validUntil = mysqli_fetch_assoc($data2)["valid_until"];
                     return array("token_id" => $tokenId, "valid_until" => $validUntil, "is_valid" => strtotime($validUntil) >= time());
@@ -161,6 +165,7 @@ class AuthUtils extends Utils
         }
         else
             return AppLogger::$CurLogger->AddError("error_unset_parameters", "tokenSha, creationDate");
+        //return AppLogger::$CurLogger->AddError("hack_try");
     }
 
     private static function GetUserInfo($authId, $username, $password)
@@ -168,15 +173,19 @@ class AuthUtils extends Utils
         if(isset($authId) && isset($username) && isset($password))
         {
             $userId = self::getStatBy("id", $authId, "user_id");
-            if (isset($userId)) {
+            if (isset($userId))
+            {
                 $data = Query::run(self::StrFormat("SELECT {0} FROM lerp2dev_users WHERE id = '{1}' AND username = '{2}' AND password = '{3}'", self::SafeUserRows(), $userId, $username, self::IsValidMD5($password) ? $password : md5($password)));
-                if (isset($data))
-                    return mysqli_fetch_assoc($data);
-                else
+                if (empty($data)) //Deberia saltar este error...
                     return AppLogger::$CurLogger->AddError("wrong_credentials");
-            } else
+                else
+                    return mysqli_fetch_assoc($data);
+            }
+            else
                 return AppLogger::$CurLogger->AddError("null_user_reg");
         }
+        else
+            return AppLogger::$CurLogger->AddError("error_unset_parameters", "authId, username, password");
     }
 }
 
@@ -186,7 +195,7 @@ class SessionUtils extends Utils
     { //Must return its sessionId
         if(isset($entId) && isset($appId))
         {
-            $sha = md5(ClientUtils::NewGuid().time());
+            $sha = self::GenerateSha();
             if (!Query::run(self::StrFormat("INSERT INTO lerp2net_sessions (app_id, entity_id, sha, start_time) VALUES ('{0}', '{1}', '{2}', NOW())", $appId, $entId, $sha)))
                 return AppLogger::$CurLogger->AddError("error_starting_session");
         }
@@ -222,7 +231,7 @@ class SessionUtils extends Utils
     {
         if(isset($entId) && isset($appId) && isset($sha) && isset($startTime) && isset($endTime))
         {
-            $sha = md5(ClientUtils::NewGuid().time());
+            $sha = self::GenerateSha();
             if(!Query::run(self::StrFormat("INSERT INTO lerp2net_sessions (app_id, entity_id, sha, start_time, end_time) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", $appId, $entId, $sha, $startTime, $endTime)))
                 return AppLogger::$CurLogger->AddError("error_finalizing_session");
         }
@@ -242,5 +251,116 @@ class AppUtils extends Utils
     public static function GetID($prefix)
     {
         return self::getStatBy("prefix", $prefix);
+    }
+}
+
+class UserUtils extends Utils
+{
+    public function __call($name, $args)
+    {
+
+        switch ($name) {
+            case 'checkValidPassword':
+                switch (count($args)) {
+                    case 1:
+                        return call_user_func_array(array($this, '_checkValidPassword'), $args);
+                    case 2:
+                        return call_user_func_array(array($this, '__checkValidPassword'), $args);
+                }
+                break;
+        }
+    }
+
+    public static function Attemps($name, $action)
+    {
+        if(empty($_SESSION['ATTEMPS'])) {$attempArray = array();} else {$attempArray = $_SESSION['ATTEMPS'];}
+        switch ($action) {
+            case 'set':
+            case 'reset': //Sets or reset all the attemps
+                $attempArray[$name] = array('TRIES' => MAX_ATTEMPS);
+                break;
+            case 'substract':
+                if(isset($attempArray[$name])) {
+                    $attempArray[$name]['TRIES'] -= 1;
+                } else {
+                    UserUtils::Attemps($name, 'set');
+                    $attempArray[$name]['TRIES'] = MAX_ATTEMPS - 1;
+                }
+                break;
+            case 'get':
+                if(isset($attempArray[$name])) {
+                    return $attempArray[$name]['TRIES'];
+                } else {
+                    UserUtils::Attemps($name, 'set');
+                    return MAX_ATTEMPS;
+                }
+                break;
+            default:
+                return false;
+                break;
+        }
+        $_SESSION['ATTEMPS'] = $attempArray;
+        return false;
+    }
+
+    public static function getRankIdByName($name)
+    {
+        return Query::firstResult("SELECT id FROM ranks WHERE name = '$name'");
+    }
+
+    public static function isOnline($id = null)
+    {
+        if(!isset($id))
+            return isset($_COOKIE["loginSession"]);
+        else
+            return mysqli_fetch_array(Query::run("SELECT last_activity FROM users WHERE id = '$id'"))['last_activity'] + SESSION_TIME*60 > time();
+    }
+
+    public static function UserExists($username)
+    {
+        return Query::count('id', 'lerp2dev_users', "WHERE username = '$username'");
+    }
+
+    public static function checkValidUsername($username, $edit)
+    {
+        if(empty($username))
+            AppLogger::$CurLogger->AddError('emptyUsername');
+        else if(preg_match('/\^|`|\*|\+|<|>|\[|\]|¨|´|\{|\}|\||\\|\"|\@|·|\#|\$|\%|\&|\¬|\/|\(|\)|=|\?|\'|¿|ª|º/', $username))
+            AppLogger::$CurLogger->AddError('forbiddenChars');
+        else if(!$edit && self::UserExists($username))
+            AppLogger::$CurLogger->AddError('userExists');
+        else if(strlen($username) <= 4)
+            AppLogger::$CurLogger->AddError('shortUsername');
+        else if(strlen($username) > 20)
+            AppLogger::$CurLogger->AddError('longUsername');
+    }
+
+    protected static function _checkValidPassword($password)
+    {
+        self::__checkValidPassword($password, $password);
+    }
+
+    protected static function __checkValidPassword($password, $cpass)
+    {
+        if(empty($password))
+            AppLogger::$CurLogger->AddError('emptyPassword');
+        else if(strlen($password) < 6)
+            AppLogger::$CurLogger->AddError('shortPassword');
+        else if($cpass != $password)
+            AppLogger::$CurLogger->AddError('wrongCPassword');
+        else if(!preg_match("#[0-9]+#", $password))
+            AppLogger::$CurLogger->AddError('numPassword');
+        else if(!preg_match("#[a-zA-Z]+#", $password))
+            AppLogger::$CurLogger->AddError('letterPassword');
+    }
+
+    public static function checkValidMail($email, $cmail)
+    {
+        if(empty($email))
+            AppLogger::$CurLogger->AddError('emptyEmail');
+        else if(!self::IsValidMail($email))
+            AppLogger::$CurLogger->AddError('invalidMail');
+        else if(isset($cmail) && $cmail != $email) //Se podría dejar así por el momento
+            AppLogger::$CurLogger->AddError('wrongCMail');
     }
 }

@@ -24,13 +24,29 @@ class Core
             return false;
         if (count($args) == 1)
             return $args[0];
-        $str = array_shift($args);
-        if(count($args) == 2 && is_array($args[1]))
-            $str = $args[1];
-        else if(count($args) > 2 && is_array($args[1]))
+        $str = array_shift($args); //Así, solamente es la string a fomatear
+        if(count($args) == 2 && is_array($args[0]))
+            $str = $args[0]; //Si no lacadena de texto se convierte en la array que hay que formatear
+        else if(count($args) > 2 && is_array($args[0]))
             self::Kill("If you pass the second parameter as an array, you can't pass more parameters to this function.");
-        $str = preg_replace_callback('/\\{(0|[1-9]\\d*)\\}/', create_function('$match', '$args = '.var_export($args, true).'; return isset($args[$match[1]]) ? $args[$match[1]] : $match[0];'), $str);
+        $str = preg_replace_callback('/\\{(0|[1-9]\\d*)\\}/', function($match) use($args, $str)
+        {
+            //$args = var_export($args, true);
+            //self::StrFormatError($match, $args, $str)
+            $trace = debug_backtrace();
+            if(is_array($args[0]) && empty($args[0][$match[1]]))
+                return $trace[2]["function"] == "StrFormat" ? false : AppLogger::$CurLogger->AddError('strformat_arr_empty_gaps', $match[1]);
+            else if(!is_array($args[0]) && empty($args[$match[1]]))
+                return $trace[2]["function"] == "StrFormat" ? false : AppLogger::$CurLogger->AddError('strformat_str_empty_gaps', $match[1]);
+            return isset($args[0]) && is_array($args[0]) && isset($match[1]) ? $args[0][$match[1]] : $args[$match[1]];
+        }, $str);
+        //create_function('$match', '$args = '.var_export($args, true).'; return isset($args[0]) && is_array($args[0]) ? (isset($match[1]) && isset($args[0][$match[1]]) ? $args[0][$match[1]] : "Str Format error: ($args: ".print_r($args, true)."; $match: ".print_r($match, true).") Undefined index: {$match[1]}") : (isset($match[1]) && isset($args[$match[1]]) ? $args[$match[1]] : "Str Format error: ($args: ".print_r($args, true)."; $match: ".print_r($match, true).") Undefined index: {$match[1]}");')
         return $str;
+    }
+
+    public static function StrFormatError($match, $args, $str)
+    {
+        return "Str Format error: (args: '".print_r($args, true)."';\n\nmatch: '".print_r($match, true)."';\n\nstr: '".(is_array($str) ? print_r($str, true) : $str)."')\n\nUndefined index: {$match[1]}";
     }
 
     public static function IsValidMail($mail)
@@ -82,14 +98,22 @@ class Core
         return preg_match('/^[a-f0-9]{32}$/', $md5);
     }
 
-    public function SetErrorHandler()
+    public static function GenerateSha()
     {
-        //Set error handler
-        set_error_handler(array($this, 'ErrorHandling'));
+        return md5(ClientUtils::NewGuid().time());
     }
 
-    public function ErrorHandling($errno, $errstr)
+    /*public function SetErrorHandler()
     {
-        AppLogger::$CurLogger->AddError("phpError", isset($errno) ? $errno : "No Err Code", $errstr);
+        //Set error handler
+        set_error_handler(function($errno, $errstr)
+        {
+            $this->ErrorHandling($errno, $errstr);
+        });
+    }*/
+
+    public static function ErrorHandling($errno, $errstr, $errfile, $errline)
+    {
+        AppLogger::$CurLogger->AddError("phpError", $errno, $errstr, $errfile, $errline, print_r(debug_backtrace(), true));
     }
 }

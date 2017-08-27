@@ -127,10 +127,13 @@ class AppIdCodes
         "null_auth_reg" => "",
         "null_token_reg" => "",
         "null_user_reg" => "",
+        "strformat_arr_empty_gaps" => "Empty arr gap #{0}",
+        "strformat_str_empty_gaps" => "Empty str gap #{0}",
         "wrong_credentials" => "",
         "error_unset_parameters" => "There are unsetted parameters: {0} in the function...",
         "queryError" => "{0}",
-        "phpError" => "Error: [{0}] {1}"
+        "phpError" => "Error: [{0}] {1}\n\nFile: {2}:{3}\n\nTrace: {4}",
+        "hackTry" => "Hack try! With the following code: {0}"
     );
     public static $EventIds = array(
         "register", "login", "logout", "get-profile", "get-tags", "get-tree", "getAppId", "regenAuth", "rememberAuth", "createAuth", "registerEntity", "startAppSession", "endAppSession", "getAppId"
