@@ -5,3 +5,5 @@ Añadir a QueryUtils metodos para añadir y actualizar datos
 Hacer que el entity_id de lerp2dev_users se registre a ser posible en el registro de un nuevo usuario o cuando se hace un login (desde una app)
 
 Juntar el $Success y el $EventIds a fin de cuenta es lo mismo solo que en un lado solo está el nombre y en el otro el nombre con el mensaje de success
+
+Esto de que el epoch sea de 32 bits no me hace mucha gracia

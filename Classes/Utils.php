@@ -90,6 +90,11 @@ class EntityUtils extends Utils
             return AppLogger::$CurLogger->AddError("error_unset_parameters", "entitySha");
         return Query::lastId(); //self::getStatBy("sha", $ek); //Return the id (porque para que vas a devolver un valor que has pasado como parametro)
     }
+
+    public static function GetID($entitySha)
+    {
+        return self::getStatBy("sha", $entitySha);
+    }
 }
 
 class TokenUtils extends Utils
@@ -103,7 +108,7 @@ class TokenUtils extends Utils
         }
         else
             return AppLogger::$CurLogger->AddError("error_unset_parameters", "entId, tokenSha");
-        return self::getStatBy("entity_id", $entId, "sha");
+        return Query::lastId(); //self::getStatBy("entity_id", $entId, "sha");
     }
 
     public static function GetID($tokenSha)
@@ -119,13 +124,60 @@ class TokenUtils extends Utils
 
 class AuthUtils extends Utils
 {
+    public static function RememberAuth($entityKey, $tokenKey, $date, $realRemember)
+    {
+        if(isset($entityKey) && isset($tokenKey) && isset($date))
+        {
+            $entId = EntityUtils::RegisterEntity($entityKey);
+            if(isset($entId))
+            {
+                $val2 = AuthUtils::CheckIfAuthIsValid($tokenKey, $date);
+                if(strtotime($val2["valid_until"]) > time()-55) //Para prevenir
+                { //Si es valido devolver nada
+                    return false;
+                }
+                else //Si no es valido entonces regenerar y devolver nueva key
+                {
+                    if($realRemember === true)
+                    {
+                        $val3 = AuthUtils::RegenAuth($entId, $val2["token_id"]);
+                        if (isset($val3))
+                            return $val3;
+                    }
+                    else
+                        return "not_remembering";
+                }
+            }
+        }
+        else
+            return AppLogger::$CurLogger->AddError("error_unset_parameters", "entityKey, tokenKey, date");
+    }
+
+    public static function RegenAuth($ent, $tokenId)
+    {
+        $tokenKey = self::GenerateSha();
+
+        $userId = self::getStatBy("token_id", $tokenId, "user_id");
+
+        if(isset($userId))
+            $userData = QueryUtils::getStatsBy("id", $userId, "lerp2dev_users", "username, password");
+        else
+            return AppLogger::$CurLogger->AddError("error_null_userdata", $tokenId);
+
+        if(empty($userData["username"]) || empty($userData["password"]))
+            return AppLogger::$CurLogger->AddError("error_auth_nullcreds");
+
+        return self::RegisterAuth(self::IsValidMD5($ent) ? EntityUtils::GetID($ent) : $ent, $tokenKey, $userData["username"], $userData["password"]);
+    }
+
     public static function RegisterAuth($entId, $tokenSha, $username, $password)
     {
         if(isset($entId) && isset($tokenSha) && isset($username) && isset($password))
         {
             $date = self::SQLNow();
             $token_id = TokenUtils::RegisterToken($entId, $tokenSha, $date);
-            if (isset($token_id)) {
+            if (isset($token_id))
+            {
                 $user_id = QueryUtils::getStatBy("username", $username, "lerp2dev_users");
                 if (isset($user_id))
                     if (!Query::run(self::StrFormat("INSERT INTO lerp2net_auth (user_id, token_id, creation_date, valid_until) VALUES ('{0}', '{1}', '{2}', NOW() + INTERVAL {3} MINUTE)", $user_id, $token_id, $date, defined("SESSION_TIME") ? SESSION_TIME : 60)))
@@ -134,7 +186,7 @@ class AuthUtils extends Utils
             $authId = Query::lastId();
             $userData = self::GetUserInfo($authId, $username, $password);
             if (isset($userData))
-                return array("id" => $authId, "creation_date" => $date, "user_data" => $userData);
+                return array("id" => $authId, "token_sha" => $tokenSha, "creation_date" => $date, "user_data" => $userData);
             else
                 return AppLogger::$CurLogger->AddError("hackTry", "auth_id: ".$authId."; username: ".$username."; password: ".$password);
         }
@@ -143,7 +195,7 @@ class AuthUtils extends Utils
     }
 
     //This will be used a lot because it checks if the current user has still a valid connection or not...
-    public static function CheckIfAuthIsvalid($tokenSha, $creationDate)
+    public static function CheckIfAuthIsValid($tokenSha, $creationDate)
     {
         if(isset($tokenSha) && isset($creationDate))
         {
@@ -175,6 +227,9 @@ class AuthUtils extends Utils
             $userId = self::getStatBy("id", $authId, "user_id");
             if (isset($userId))
             {
+                //Core::$sess->nickname = $username;
+                //Core::$sess->password = $password;
+
                 $data = Query::run(self::StrFormat("SELECT {0} FROM lerp2dev_users WHERE id = '{1}' AND username = '{2}' AND password = '{3}'", self::SafeUserRows(), $userId, $username, self::IsValidMD5($password) ? $password : md5($password)));
                 if (empty($data)) //Deberia saltar este error...
                     return AppLogger::$CurLogger->AddError("wrong_credentials");

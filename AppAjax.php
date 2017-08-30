@@ -60,6 +60,18 @@ class AppAjax extends Core
                     {
                         switch ($_POST["action"])
                         {
+                            /*case "regenAuth":
+                                //La solicitación se hará a través de una OldKey, la cual se comprobará si ya existia en la base de datos, y si era asi se procederá a entregar un nuevo login
+                                //Es como llamar a create-auth (pero comprobando la antigua key)
+                                break;*/
+                            case "rememberAuth":
+                                //Este será el metodo que se llamará desde el timer cada minuto, si el valid_until es menor a PHP_NOW, entonces se devolverá un false, y en .NET habrá que llamar con otro post al regen-auth
+                                //Si la opcion de remember estaba activada, si no se devolverá al usuario al login para que vuelva a poner sus datos
+                                $date = @$_POST["creation_date"];
+                                $data = AuthUtils::RememberAuth($entityKey, $tokenKey, $date, @$_POST["remember"] === 'true' ? true : false);
+                                if(isset($data))
+                                    AppLogger::$CurLogger->AddParameter("data", $data);
+                                break;
                             default:
                                 self::Kill(self::StrFormat("[POST] Action '{0}' not registered with both tokenKey ('{1}') & entityKey ('{2}') defined!", $_POST["action"], $tokenKey, $entityKey));
                                 break;
@@ -104,14 +116,6 @@ class AppAjax extends Core
                                 $val = EntityUtils::RegisterEntity($entityKey);
                                 if(isset($val))
                                     AppLogger::$CurLogger->AddParameter("data", null);
-                                break;
-                            case "regenAuth":
-                                //La solicitación se hará a través de una OldKey, la cual se comprobará si ya existia en la base de datos, y si era asi se procederá a entregar un nuevo login
-                                //Es como llamar a create-auth (pero comprobando la antigua key)
-                                break;
-                            case "rememberAuth":
-                                //Este será el metodo que se llamará desde el timer cada minuto, si el valid_until es menor a PHP_NOW, entonces se devolverá un false, y en .NET habrá que llamar con otro post al regen-auth
-                                //Si la opcion de remember estaba activada, si no se devolverá al usuario al login para que vuelva a poner sus datos
                                 break;
                             case "startAppSession":
                                 $appId = @$_POST["app_id"];

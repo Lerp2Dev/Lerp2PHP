@@ -52,6 +52,7 @@ class Loader extends Settings
 
         require_once('DevProfiles.php');
         require_once('Settings.php');
+        require_once('Classes/Session.php');
         require_once('Classes/Debug.php');
         require_once('Classes/Database.php');
         require_once('Classes/Utils.php');
@@ -72,6 +73,9 @@ class Loader extends Settings
 
         //Prepare Logger for this print
         AppLogger::$CurLogger = new AppLogger();
+
+        //Setting session:
+        //Core::$sess = Session::getInstance();
 
         //Set error handler
         //parent::getInstance()->SetErrorHandler();

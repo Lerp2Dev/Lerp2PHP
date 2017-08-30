@@ -10,6 +10,7 @@ class Core
 {
     public static $instance;
     public static $isDieCalled;
+    public static $sess;
 
     public static function getInstance ()
     {
