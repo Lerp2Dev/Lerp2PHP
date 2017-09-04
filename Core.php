@@ -18,6 +18,18 @@ class Core
         return self::$instance;
     }
 
+    public static function SQLFormat()
+    {
+        $arr = func_get_args();
+        $shifted = array_shift($arr);
+        $escaped = array();
+
+        foreach($arr as $v)
+            $escaped[] = mysqli_real_escape_string(Database::conn(), $v);
+
+        return self::StrFormat($shifted, $escaped);
+    }
+
     public static function StrFormat()
     { //Realmente con esto se hace functionar mucho mas al servidor... Solamente se requiere en el logger y lo estoy usando en las consultas de SQL donde se puede hacer perfectamente un {$var}
         $args = func_get_args();

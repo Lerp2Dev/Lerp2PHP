@@ -58,10 +58,10 @@ class EntityUtils extends Utils
         {
             if (self::ExistsEntity($ek))
             {
-                $res1 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_activity = NOW() WHERE sha = '{0}'", $ek));
+                $res1 = Query::run(self::SQLFormat("UPDATE lerp2net_entities SET last_activity = NOW() WHERE sha = '{0}'", $ek));
                 $def = self::getStatBy("last_ip", ClientUtils::GetClientIP()) != ClientUtils::GetClientIP();
                 if ($def)
-                    $res2 = Query::run(self::StrFormat("UPDATE lerp2net_entities SET last_ip = '{0}' WHERE sha = '{1}'", ClientUtils::GetClientIP(), $ek));
+                    $res2 = Query::run(self::SQLFormat("UPDATE lerp2net_entities SET last_ip = '{0}' WHERE sha = '{1}'", ClientUtils::GetClientIP(), $ek));
                 return !empty($res1) && ($def && !empty($res2) || !$def);
             }
             else
@@ -77,7 +77,7 @@ class EntityUtils extends Utils
         {
             if(!self::ExistsEntity($ek))
             {
-                if (!Query::run(self::StrFormat("INSERT INTO lerp2net_entities (sha, last_ip, creation_date, last_activity) VALUES ('{0}', '{1}', NOW(), NOW())", $ek, ClientUtils::GetClientIP())))
+                if (!Query::run(self::SQLFormat("INSERT INTO lerp2net_entities (sha, last_ip, creation_date, last_activity) VALUES ('{0}', '{1}', NOW(), NOW())", $ek, ClientUtils::GetClientIP())))
                     return AppLogger::$CurLogger->AddError("error_registering_entity");
             }
             else
@@ -103,7 +103,7 @@ class TokenUtils extends Utils
     {
         if(isset($entId) && isset($tokenSha))
         {
-            if (!Query::run(self::StrFormat("INSERT INTO lerp2net_tokens (entity_id, sha, creation_date) VALUES ('{0}', '{1}', {2})", $entId, $tokenSha, $date == "" ? "NOW()" : "'".$date."'")))
+            if (!Query::run(self::SQLFormat("INSERT INTO lerp2net_tokens (entity_id, sha, creation_date) VALUES ('{0}', '{1}', {2})", $entId, $tokenSha, $date == "" ? "NOW()" : "'".$date."'")))
                 return AppLogger::$CurLogger->AddError("error_registering_token");
         }
         else
@@ -180,7 +180,7 @@ class AuthUtils extends Utils
             {
                 $user_id = QueryUtils::getStatBy("username", $username, "lerp2dev_users");
                 if (isset($user_id))
-                    if (!Query::run(self::StrFormat("INSERT INTO lerp2net_auth (user_id, token_id, creation_date, valid_until) VALUES ('{0}', '{1}', '{2}', NOW() + INTERVAL {3} MINUTE)", $user_id, $token_id, $date, defined("SESSION_TIME") ? SESSION_TIME : 60)))
+                    if (!Query::run(self::SQLFormat("INSERT INTO lerp2net_auth (user_id, token_id, creation_date, valid_until) VALUES ('{0}', '{1}', '{2}', NOW() + INTERVAL {3} MINUTE)", $user_id, $token_id, $date, defined("SESSION_TIME") ? SESSION_TIME : 60)))
                         return AppLogger::$CurLogger->AddError("error_registering_auth");
             }
             $authId = Query::lastId();
@@ -199,11 +199,11 @@ class AuthUtils extends Utils
     {
         if(isset($tokenSha) && isset($creationDate))
         {
-            $data = Query::run(self::StrFormat("SELECT id FROM lerp2net_tokens WHERE sha = '{0}' AND creation_date = '{1}'", $tokenSha, $creationDate));
+            $data = Query::run(self::SQLFormat("SELECT id FROM lerp2net_tokens WHERE sha = '{0}' AND creation_date = '{1}'", $tokenSha, $creationDate));
             if($data != false)
             {
                 $tokenId = mysqli_fetch_assoc($data)["id"];
-                $data2 = Query::run(self::StrFormat("SELECT valid_until FROM lerp2net_auth WHERE token_id = '{0}' AND creation_date = '{1}'", $tokenId, $creationDate));
+                $data2 = Query::run(self::SQLFormat("SELECT valid_until FROM lerp2net_auth WHERE token_id = '{0}' AND creation_date = '{1}'", $tokenId, $creationDate));
                 if($data2 != false)
                 {
                     $validUntil = mysqli_fetch_assoc($data2)["valid_until"];
@@ -230,7 +230,7 @@ class AuthUtils extends Utils
                 //Core::$sess->nickname = $username;
                 //Core::$sess->password = $password;
 
-                $data = Query::run(self::StrFormat("SELECT {0} FROM lerp2dev_users WHERE id = '{1}' AND username = '{2}' AND password = '{3}'", self::SafeUserRows(), $userId, $username, self::IsValidMD5($password) ? $password : md5($password)));
+                $data = Query::run(self::SQLFormat("SELECT {0} FROM lerp2dev_users WHERE id = '{1}' AND username = '{2}' AND password = '{3}'", self::SafeUserRows(), $userId, $username, self::IsValidMD5($password) ? $password : md5($password)));
                 if (empty($data)) //Deberia saltar este error...
                     return AppLogger::$CurLogger->AddError("wrong_credentials");
                 else
@@ -251,7 +251,7 @@ class SessionUtils extends Utils
         if(isset($entId) && isset($appId))
         {
             $sha = self::GenerateSha();
-            if (!Query::run(self::StrFormat("INSERT INTO lerp2net_sessions (app_id, entity_id, sha, start_time) VALUES ('{0}', '{1}', '{2}', NOW())", $appId, $entId, $sha)))
+            if (!Query::run(self::SQLFormat("INSERT INTO lerp2net_sessions (app_id, entity_id, sha, start_time) VALUES ('{0}', '{1}', '{2}', NOW())", $appId, $entId, $sha)))
                 return AppLogger::$CurLogger->AddError("error_starting_session");
         }
         else
@@ -274,7 +274,7 @@ class SessionUtils extends Utils
         if(isset($sha))
         {
             //$sha = md5(ClientUtils::NewGuid().time());
-            if(!Query::run(self::StrFormat("UPDATE lerp2net_sessions SET end_time = '{0}' WHERE sha = '{1}'", $date == "" ? self::SQLNow() : $date, $sha)))
+            if(!Query::run(self::SQLFormat("UPDATE lerp2net_sessions SET end_time = '{0}' WHERE sha = '{1}'", $date == "" ? self::SQLNow() : $date, $sha)))
                 return AppLogger::$CurLogger->AddError("error_ending_session");
         }
         else
@@ -287,7 +287,7 @@ class SessionUtils extends Utils
         if(isset($entId) && isset($appId) && isset($sha) && isset($startTime) && isset($endTime))
         {
             $sha = self::GenerateSha();
-            if(!Query::run(self::StrFormat("INSERT INTO lerp2net_sessions (app_id, entity_id, sha, start_time, end_time) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", $appId, $entId, $sha, $startTime, $endTime)))
+            if(!Query::run(self::SQLFormat("INSERT INTO lerp2net_sessions (app_id, entity_id, sha, start_time, end_time) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", $appId, $entId, $sha, $startTime, $endTime)))
                 return AppLogger::$CurLogger->AddError("error_finalizing_session");
         }
         else
