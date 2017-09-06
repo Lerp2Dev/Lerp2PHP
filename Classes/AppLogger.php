@@ -22,20 +22,26 @@ class AppLogger extends Core
 
     public $Log;
     public $EventId;
+    public $Disabled;
 
     public function __construct()
     {
         $this->Log = array(
             "errors" => array()
         );
+        $action = @$_REQUEST["action"];
+        $this->Disabled = isset($action) && in_array($action, AppIdCodes::$DisabledEvents);
     }
 
     public function __destruct()
     {
-        if(!$this->IsErrored())
-            $this->Log["success"] = isset($_REQUEST['detailed']) || isset($_REQUEST['detailedsuc']) ? array(array_keys(AppIdCodes::$EventIds)[$this->EventId] => array_values(AppIdCodes::$EventIds)[$this->EventId]) : $this->EventId;
-        if(!self::$isDieCalled)
-            echo self::$CurLogger->DisplayJSON();
+        if(!$this->Disabled)
+        {
+            if(!$this->IsErrored())
+                $this->Log["success"] = isset($_REQUEST['detailed']) || isset($_REQUEST['detailedsuc']) ? array(array_keys(AppIdCodes::$EventIds)[$this->EventId] => array_values(AppIdCodes::$EventIds)[$this->EventId]) : $this->EventId;
+            if(!self::$isDieCalled)
+                echo self::$CurLogger->DisplayJSON();
+        }
     }
 
     public function SetEventId($name)
@@ -78,6 +84,10 @@ class AppLogger extends Core
     public function IsErrored()
     {
         return !empty($this->Log["errors"]);
+    }
+
+    public static function Disable() {
+        self::getInstance()->Disable = true;
     }
 }
 
@@ -138,6 +148,9 @@ class AppIdCodes
         "hackTry" => "Hack try! With the following code: {0}"
     );
     public static $EventIds = array(
-        "register", "login", "logout", "get-profile", "get-tags", "get-tree", "getAppId", "regenAuth", "rememberAuth", "createAuth", "registerEntity", "startAppSession", "endAppSession", "getAppId"
+        "register", "login", "logout", "get-profile", "get-tags", "get-tree", "getAppId", "regenAuth", "rememberAuth", "createAuth", "registerEntity", "startAppSession", "endAppSession", "getAppId", "get-tutorial", "get-desc"
+    );
+    public static $DisabledEvents = array(
+        "get-tutorial", "get-desc"
     );
 }

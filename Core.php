@@ -57,7 +57,7 @@ class Core
         return $str;
     }
 
-    public static function StrFormatError($match, $args, $str)
+    private static function StrFormatError($match, $args, $str)
     {
         return "Str Format error: (args: '".print_r($args, true)."';\n\nmatch: '".print_r($match, true)."';\n\nstr: '".(is_array($str) ? print_r($str, true) : $str)."')\n\nUndefined index: {$match[1]}";
     }
