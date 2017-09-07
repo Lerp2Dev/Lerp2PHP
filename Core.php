@@ -116,6 +116,11 @@ class Core
         return md5(ClientUtils::NewGuid().time());
     }
 
+    public static function GetServerUrl()
+    {
+        return dirname("http".(!empty($_SERVER['HTTPS'])?"s":"")."://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+    }
+
     /*public function SetErrorHandler()
     {
         //Set error handler

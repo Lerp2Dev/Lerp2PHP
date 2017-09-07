@@ -46,6 +46,9 @@ class Loader extends Settings
         if(!defined("REGISTER_HIT"))
             define("REGISTER_HIT", true);
 
+        if(!defined("LOADED_INCLUDED"))
+            define("LOADED_INCLUDED", true);
+
         // #####################################
         // ######### Include Classes ###########
         // #####################################
